@@ -165,7 +165,7 @@ const Hero = () => {
                   </a>
                 </Button>
                 <Button
-                  variant="outline"
+                  variant="default"
                   size="lg"
                   className="border-background/30 text-background hover:bg-background/10 backdrop-blur-sm text-sm md:text-base"
                   asChild

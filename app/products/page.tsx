@@ -258,7 +258,7 @@ const Products = () => {
       {/* Products Grid */}
       <section className="py-12">
         <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
             {filteredProducts.map((product) => (
               <Link href={`/products/${product.id}`} key={product.id}>
                 <Card className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer">

@@ -13,6 +13,7 @@ import {
   Clock,
   ThumbsUp,
 } from "lucide-react";
+import Link from "next/link";
 
 const About = () => {
   const stats = [
@@ -161,7 +162,7 @@ const About = () => {
                     Get Started Today
                   </a>
                 </Button>
-                <Button variant="outline" asChild>
+                <Button variant="secondary" asChild>
                   <a href="tel:9851187267">
                     <Phone className="mr-2 h-4 w-4" />
                     Call Us
@@ -327,11 +328,11 @@ const About = () => {
               </Button>
               <Button
                 size="lg"
-                variant="outline"
+                variant="default"
                 className="text-white border-white hover:bg-white hover:text-blue-600"
                 asChild
               >
-                <a href="/portfolio">View Our Work</a>
+                <Link href="/portfolio">View Our Work</Link>
               </Button>
             </div>
           </div>

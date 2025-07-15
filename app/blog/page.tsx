@@ -106,7 +106,6 @@ const Blog = () => {
 
   return (
     <div className="min-h-screen">
-
       {/* Hero Section */}
       <section className="py-16 bg-gradient-to-r from-blue-50 to-purple-50">
         <div className="container mx-auto px-4">
@@ -147,6 +146,7 @@ const Blog = () => {
                     alt={featuredPost.title}
                     className="w-full h-64 lg:h-full object-cover"
                   />
+
                   <Badge className="absolute top-4 left-4">
                     {featuredPost.category}
                   </Badge>
@@ -272,7 +272,6 @@ const Blog = () => {
           </div>
         </div>
       </section>
-
     </div>
   );
 };

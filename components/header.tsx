@@ -89,7 +89,7 @@ const Header = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:block">
+          <nav className="hidden xl:block">
             <NavigationMenu>
               <NavigationMenuList>
                 {navigationItems.map((item) => (
@@ -160,7 +160,7 @@ const Header = () => {
           </nav>
 
           {/* Contact Button - Hidden on small screens */}
-          <div className="hidden lg:flex items-center">
+          <div className="hidden xl:flex items-center">
             <Button
               size="sm"
               className="bg-primary hover:bg-primary/90"
@@ -178,7 +178,7 @@ const Header = () => {
 
           {/* Mobile Menu */}
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
-            <SheetTrigger asChild className="lg:hidden">
+            <SheetTrigger asChild className="xl:hidden">
               <Button variant="ghost" size="sm">
                 <Menu className="h-5 w-5" />
               </Button>
@@ -187,10 +187,14 @@ const Header = () => {
               <ScrollArea className="h-full">
                 <div className="flex flex-col space-y-4 p-6">
                   <div className="flex items-center justify-between mb-4">
-                    <img
-                      src="/lovable-uploads/76a9e0e6-f29d-4304-bc9d-2f050ff8ad55.png"
+                    <Image
+                      width={200}
+                      height={160}
+                      src="/logo.png"
                       alt="FalseCeilingNepal Logo"
-                      className="h-8 w-auto"
+                      className="h-12 w-auto sm:h-16 hover:scale-105 transition-transform duration-200"
+                      priority
+                      quality={100}
                     />
                   </div>
 

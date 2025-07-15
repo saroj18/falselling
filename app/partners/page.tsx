@@ -22,6 +22,7 @@ import {
   Mail,
   Building,
 } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const Partners = () => {
   const benefits = [
@@ -354,12 +355,16 @@ const Partners = () => {
 
                   <div>
                     <Label htmlFor="partnership">Partnership Type *</Label>
-                    <select className="w-full px-3 py-2 border border-gray-300 rounded-md">
-                      <option value="">Select partnership type</option>
-                      <option value="dealer">Authorized Dealer</option>
-                      <option value="distributor">Regional Distributor</option>
-                      <option value="installer">Installation Partner</option>
-                    </select>
+                    <Select>
+                      <SelectTrigger id="partnership" className="w-full">
+                        <SelectValue placeholder="Select partnership type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="dealer">Authorized Dealer</SelectItem>
+                        <SelectItem value="distributor">Regional Distributor</SelectItem>
+                        <SelectItem value="installer">Installation Partner</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
 
                   <div>

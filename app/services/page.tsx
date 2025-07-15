@@ -332,7 +332,7 @@ const Services = () => {
               </Button>
               <Button
                 size="lg"
-                variant="outline"
+                variant="default"
                 className="text-white border-white hover:bg-white hover:text-blue-600"
                 asChild
               >

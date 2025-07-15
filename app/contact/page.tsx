@@ -287,7 +287,7 @@ const Contact = () => {
                     WhatsApp Now
                   </a>
                 </Button>
-                <Button size="lg" variant="outline" className="w-full" asChild>
+                <Button size="lg" variant="secondary" className="w-full" asChild>
                   <a href="tel:9851187267">
                     <Phone className="mr-2 h-5 w-5" />
                     Call: 9851187267

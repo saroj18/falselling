@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useState } from "react";
 import {
@@ -36,6 +36,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const Pricing = () => {
   const [selectedArea, setSelectedArea] = useState(100);
@@ -128,7 +135,6 @@ const Pricing = () => {
 
   return (
     <div className="min-h-screen bg-background">
-
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-blue-50 to-purple-50 py-16">
         <div className="container mx-auto px-4">
@@ -181,18 +187,23 @@ const Pricing = () => {
                   </div>
                   <div>
                     <Label htmlFor="material">Material Type</Label>
-                    <select
-                      id="material"
+                    <Select
                       value={selectedMaterial}
-                      onChange={(e) => setSelectedMaterial(e.target.value)}
-                      className="mt-2 w-full p-2 border border-gray-300 rounded-md"
+                      onValueChange={setSelectedMaterial}
                     >
-                      <option value="gypsum">Gypsum Boards</option>
-                      <option value="pvc">PVC Panels</option>
-                      <option value="metal">Metal Ceilings</option>
-                      <option value="acoustic">Acoustic Ceilings</option>
-                      <option value="wooden">Wooden Ceilings</option>
-                    </select>
+                      <SelectTrigger className="mt-2 w-full">
+                        <SelectValue placeholder="Select material type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="gypsum">Gypsum Boards</SelectItem>
+                        <SelectItem value="pvc">PVC Panels</SelectItem>
+                        <SelectItem value="metal">Metal Ceilings</SelectItem>
+                        <SelectItem value="acoustic">
+                          Acoustic Ceilings
+                        </SelectItem>
+                        <SelectItem value="wooden">Wooden Ceilings</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
                 </div>
 
@@ -381,16 +392,26 @@ const Pricing = () => {
                           <FormItem>
                             <FormLabel>Project Type</FormLabel>
                             <FormControl>
-                              <select
-                                {...field}
-                                className="w-full p-2 border border-gray-300 rounded-md"
+                              <Select
+                                value={field.value}
+                                onValueChange={field.onChange}
                               >
-                                <option value="">Select project type</option>
-                                <option value="residential">Residential</option>
-                                <option value="commercial">Commercial</option>
-                                <option value="office">Office</option>
-                                <option value="showroom">Showroom</option>
-                              </select>
+                                <SelectTrigger className="w-full mt-2">
+                                  <SelectValue placeholder="Select project type" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="residential">
+                                    Residential
+                                  </SelectItem>
+                                  <SelectItem value="commercial">
+                                    Commercial
+                                  </SelectItem>
+                                  <SelectItem value="office">Office</SelectItem>
+                                  <SelectItem value="showroom">
+                                    Showroom
+                                  </SelectItem>
+                                </SelectContent>
+                              </Select>
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -435,7 +456,7 @@ const Pricing = () => {
                       </Button>
                       <Button
                         type="button"
-                        variant="outline"
+                        variant="default"
                         asChild
                         className="flex-1"
                       >
@@ -502,7 +523,6 @@ const Pricing = () => {
           </div>
         </div>
       </section>
-
     </div>
   );
 };
