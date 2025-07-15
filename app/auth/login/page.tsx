@@ -1,40 +1,69 @@
 "use client";
 
-import { useState } from "react";
-import { Eye, EyeOff, Lock, Mail, User, ArrowLeft, Phone } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Eye, EyeOff, Lock, Mail, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { signIn } from "next-auth/react";
 import {
   Card,
   CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import Link from "next/link";
 import Image from "next/image";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { loginSchema } from "@/zod-schema/user";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
-const Signup = () => {
+type LoginFormValues = z.infer<typeof loginSchema>;
+
+const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    password: "",
-    confirmPassword: "",
-    agreeToTerms: false,
-    subscribeNewsletter: false,
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginFormValues>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: "john@gmail.com",
+      password: "password",
+    },
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Signup attempt:", formData);
-  };
-
-  const handleInputChange = (field: string, value: string | boolean) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
+  const onSubmit = async (data: LoginFormValues) => {
+    console.log("Login attempt:", data);
+    try {
+      console.log(data);
+      setLoading(true);
+      const resp = await signIn("credentials", {
+        redirect: false,
+        ...data,
+      });
+      if (resp?.ok) {
+        toast.success("Login Successfully", { style: { color: "green" } });
+        setLoading(false);
+        router.push("/");
+      } else {
+        toast.success(resp?.error, { style: { color: "red" } });
+        setLoading(false);
+      }
+    } catch (error: any) {
+      toast.error(error.response.data.error, { style: { color: "red" } });
+      setLoading(false);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -62,47 +91,14 @@ const Signup = () => {
                 quality={100}
               />
             </div>
-            <CardTitle className="text-2xl font-bold">
-              Create your account
-            </CardTitle>
+            <CardTitle className="text-2xl font-bold">Welcome back</CardTitle>
+            <CardDescription>
+              Sign in to your account to continue
+            </CardDescription>
           </CardHeader>
 
           <CardContent className="space-y-6">
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="firstName">First Name</Label>
-                  <div className="relative">
-                    <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                    <Input
-                      id="firstName"
-                      type="text"
-                      placeholder="First name"
-                      value={formData.firstName}
-                      onChange={(e) =>
-                        handleInputChange("firstName", e.target.value)
-                      }
-                      className="pl-10"
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="lastName">Last Name</Label>
-                  <Input
-                    id="lastName"
-                    type="text"
-                    placeholder="Last name"
-                    value={formData.lastName}
-                    onChange={(e) =>
-                      handleInputChange("lastName", e.target.value)
-                    }
-                    required
-                  />
-                </div>
-              </div>
-
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
                 <div className="relative">
@@ -111,27 +107,14 @@ const Signup = () => {
                     id="email"
                     type="email"
                     placeholder="Enter your email"
-                    value={formData.email}
-                    onChange={(e) => handleInputChange("email", e.target.value)}
+                    {...register("email")}
                     className="pl-10"
-                    required
                   />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="phone">Phone Number</Label>
-                <div className="relative">
-                  <Phone className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    id="phone"
-                    type="tel"
-                    placeholder="Enter your phone number"
-                    value={formData.phone}
-                    onChange={(e) => handleInputChange("phone", e.target.value)}
-                    className="pl-10"
-                    required
-                  />
+                  {errors.email && (
+                    <p className="text-xs text-red-500 mt-1">
+                      {errors.email.message}
+                    </p>
+                  )}
                 </div>
               </div>
 
@@ -142,13 +125,9 @@ const Signup = () => {
                   <Input
                     id="password"
                     type={showPassword ? "text" : "password"}
-                    placeholder="Create a password"
-                    value={formData.password}
-                    onChange={(e) =>
-                      handleInputChange("password", e.target.value)
-                    }
+                    placeholder="Enter your password"
+                    {...register("password")}
                     className="pl-10 pr-10"
-                    required
                   />
                   <button
                     type="button"
@@ -161,44 +140,30 @@ const Signup = () => {
                       <Eye className="h-4 w-4" />
                     )}
                   </button>
+                  {errors.password && (
+                    <p className="text-xs text-red-500 mt-1">
+                      {errors.password.message}
+                    </p>
+                  )}
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="confirmPassword">Confirm Password</Label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    id="confirmPassword"
-                    type={showConfirmPassword ? "text" : "password"}
-                    placeholder="Confirm your password"
-                    value={formData.confirmPassword}
-                    onChange={(e) =>
-                      handleInputChange("confirmPassword", e.target.value)
-                    }
-                    className="pl-10 pr-10"
-                    required
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute right-3 top-3 text-muted-foreground hover:text-foreground"
-                  >
-                    {showConfirmPassword ? (
-                      <EyeOff className="h-4 w-4" />
-                    ) : (
-                      <Eye className="h-4 w-4" />
-                    )}
-                  </button>
-                </div>
+              <div className="flex items-center justify-between">
+                <Link
+                  href="/forgot-password"
+                  className="text-sm text-primary hover:text-primary/80 font-medium"
+                >
+                  Forgot password?
+                </Link>
               </div>
 
               <Button
+                disabled={loading}
                 type="submit"
                 className="w-full"
                 size="lg"
               >
-                Create Account
+                {loading ? "Loading....." : "Sign In"}
               </Button>
             </form>
 
@@ -213,7 +178,7 @@ const Signup = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            {/* <div className="grid grid-cols-2 gap-4">
               <Button variant="outline" className="w-full">
                 <svg className="h-4 w-4 mr-2" viewBox="0 0 24 24">
                   <path
@@ -245,15 +210,15 @@ const Signup = () => {
                 </svg>
                 Facebook
               </Button>
-            </div>
+            </div> */}
 
             <div className="text-center text-sm text-muted-foreground">
-              Already have an account?{" "}
+              Don't have an account?{" "}
               <Link
-                href="/login"
+                href="/auth/signup"
                 className="text-primary hover:text-primary/80 font-medium"
               >
-                Sign in
+                Sign up
               </Link>
             </div>
           </CardContent>
@@ -263,4 +228,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default Login;
