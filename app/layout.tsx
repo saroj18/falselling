@@ -1,9 +1,8 @@
+
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/header";
-import Footer from "@/components/footer";
-import { Toaster } from "@/components/ui/sonner";
+import LayoutShell from "@/components/layoutShell";
 
 // const geistSans = Geist({
 //   variable: "--font-geist-sans",
@@ -31,13 +30,11 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+ 
   return (
     <html lang="en">
       <body className={` ${poppins.variable} antialiased`}>
-        <Header />
-        <main>{children}</main>
-        <Toaster />
-        <Footer />
+        <LayoutShell>{children}</LayoutShell>
       </body>
     </html>
   );
