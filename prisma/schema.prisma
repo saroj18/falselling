@@ -22,3 +22,22 @@ model User {
   phone      String         @unique
 
 }
+
+model Product {
+  id          String   @id @default(uuid())
+  name        String
+  category    String
+  price       Float
+  stock       Int
+  status      String   // "In Stock", "Low Stock", "Out of Stock"
+  description String
+  weight      Float
+  dimensions  String
+  sku         String?
+  brand       String?
+  warranty    String
+  images      String[]
+  tags        String[] // Array of strings
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

@@ -26,8 +26,10 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Package, Upload, X } from "lucide-react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { ProductFormData, productSchema } from "@/zod-schema/product";
+import Image from "next/image";
+import { addProduct } from "@/actions/product";
 
 interface ProductFormDialogProps {
   open: boolean;
@@ -42,26 +44,26 @@ const ProductFormDialog = ({
   mode,
   product,
 }: ProductFormDialogProps) => {
-  const [images, setImages] = useState<string[]>([]);
+  const imageRef = useRef<HTMLInputElement | null>(null);
 
   const form = useForm<ProductFormData>({
     resolver: zodResolver(productSchema) as any,
     defaultValues: {
-      name: product?.name ?? "",
-      category: product?.category ?? "",
-      price: product?.price ?? 0,
-      stock: product?.stock ?? 0,
-      status: "In Stock",
-      description: "",
-      weight: 0,
-      dimensions: "",
-      sku: "",
-      brand: "",
-      warranty: "",
-      tags: [],
+      name: product?.name ?? "Test Product",
+      category: product?.category ?? "Lighting",
+      price: product?.price ?? 1000,
+      stock: product?.stock ?? 112,
+      status: "in-stock",
+      description: "this is a demo description for a test product",
+      weight: 12,
+      dimensions: "12*14",
+      sku: "ssk",
+      brand: "sony",
+      warranty: "2",
+      tags: ["okya", "cheap", "quality"],
+      images: undefined,
     },
   });
-
   const categories = [
     "Ceiling Tiles",
     "Wall Panels",
@@ -69,15 +71,16 @@ const ProductFormDialog = ({
     "Accessories",
   ];
 
-  const onSubmit = (data: ProductFormData) => {
+  const onSubmit = async (data: ProductFormData) => {
     console.log("Product data:", data);
+    await addProduct(data);
     onOpenChange(false);
     form.reset();
   };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="!max-w-5xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Package className="h-5 w-5" />
@@ -117,7 +120,7 @@ const ProductFormDialog = ({
                           onValueChange={field.onChange}
                           value={field.value}
                         >
-                          <FormControl>
+                          <FormControl className="w-full">
                             <SelectTrigger>
                               <SelectValue placeholder="Select category" />
                             </SelectTrigger>
@@ -143,7 +146,14 @@ const ProductFormDialog = ({
                         <FormItem>
                           <FormLabel>Price</FormLabel>
                           <FormControl>
-                            <Input placeholder="0.00" {...field} />
+                            <Input
+                              type="number"
+                              placeholder="0.00"
+                              {...field}
+                              onChange={(e) =>
+                                field.onChange(parseInt(e.target.value) || 0)
+                              }
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -181,14 +191,17 @@ const ProductFormDialog = ({
                           onValueChange={field.onChange}
                           value={field.value}
                         >
-                          <FormControl>
+                          <FormControl className="w-full">
                             <SelectTrigger>
                               <SelectValue placeholder="Select status" />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value="Active">Active</SelectItem>
-                            <SelectItem value="Inactive">Inactive</SelectItem>
+                            <SelectItem value="in-stock">In Stock</SelectItem>
+                            <SelectItem value="out-of-stock">
+                              Out of Stock
+                            </SelectItem>
+                            <SelectItem value="low-stock">Low Stock</SelectItem>
                           </SelectContent>
                         </Select>
                         <FormMessage />
@@ -221,32 +234,58 @@ const ProductFormDialog = ({
                 <CardContent className="p-6 space-y-4">
                   <h3 className="text-lg font-semibold">Product Images</h3>
 
-                  <div className="border-2 border-dashed border-border rounded-lg p-6 text-center">
+                  <div
+                    role="button"
+                    onClick={() => imageRef.current?.click()}
+                    className="border-2 cursor-pointer border-dashed border-border rounded-lg p-6 text-center"
+                  >
                     <Upload className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
                     <p className="text-sm text-muted-foreground mb-2">
                       Drag and drop images here or click to browse
                     </p>
-                    <Button variant="outline" size="sm">
-                      Choose Files
-                    </Button>
+                    <FormField
+                      control={form.control}
+                      name="images"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormControl>
+                            <input
+                              onChange={(e) =>
+                                form.setValue(
+                                  "images",
+                                  e.target.files as FileList
+                                )
+                              }
+                              accept=".jpeg,.png"
+                              type="file"
+                              ref={imageRef}
+                              hidden
+                              multiple
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
                   </div>
 
-                  {images.length > 0 && (
+                  {form.watch("images")?.length > 0 && (
                     <div className="grid grid-cols-2 gap-4">
-                      {images.map((img, index) => (
-                        <div key={index} className="relative group">
-                          <div className="aspect-square bg-muted rounded-lg flex items-center justify-center">
-                            <Package className="h-8 w-8 text-muted-foreground" />
+                      {Array.from(form.getValues("images")).map(
+                        (img, index) => (
+                          <div key={index} className="relative group">
+                            <div className=" border-4 border-green-400 bg-muted rounded-lg flex items-center justify-center">
+                              <Image
+                                width={200}
+                                height={200}
+                                alt="product images"
+                                src={URL.createObjectURL(img as File)}
+                                className="rounded-lg"
+                              />
+                            </div>
                           </div>
-                          <Button
-                            variant="destructive"
-                            size="sm"
-                            className="absolute top-2 right-2 h-6 w-6 p-0 opacity-0 group-hover:opacity-100"
-                          >
-                            <X className="h-3 w-3" />
-                          </Button>
-                        </div>
-                      ))}
+                        )
+                      )}
                     </div>
                   )}
                 </CardContent>
@@ -332,18 +371,79 @@ const ProductFormDialog = ({
                 <FormField
                   control={form.control}
                   name="tags"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Tags</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Enter tags (comma separated)"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+                  render={({ field }) => {
+                    const [inputValue, setInputValue] = useState("");
+                    const tags = field.value || [];
+
+                    const handleInputChange = (
+                      e: React.ChangeEvent<HTMLInputElement>
+                    ) => {
+                      setInputValue(e.target.value);
+                    };
+
+                    const handleInputKeyDown = (
+                      e: React.KeyboardEvent<HTMLInputElement>
+                    ) => {
+                      if (e.key === "," || e.key === "Enter") {
+                        e.preventDefault();
+                        const newTag = inputValue.trim().replace(/,$/, "");
+                        if (newTag && !tags.includes(newTag)) {
+                          const newTags = [...tags, newTag];
+                          field.onChange(newTags);
+                        }
+                        setInputValue("");
+                      } else if (
+                        e.key === "Backspace" &&
+                        !inputValue &&
+                        tags.length > 0
+                      ) {
+                        const newTags = tags.slice(0, -1);
+                        field.onChange(newTags);
+                      }
+                    };
+
+                    const handleRemoveTag = (tagToRemove: string) => {
+                      const newTags = tags.filter(
+                        (tag: string) => tag !== tagToRemove
+                      );
+                      field.onChange(newTags);
+                    };
+
+                    return (
+                      <FormItem>
+                        <FormLabel>Tags</FormLabel>
+                        <FormControl>
+                          <div>
+                            <div className="flex flex-wrap gap-2 mb-2">
+                              {tags.map((tag: string, idx: number) => (
+                                <span
+                                  key={idx}
+                                  className="flex items-center bg-muted px-2 py-1 rounded text-sm"
+                                >
+                                  {tag}
+                                  <button
+                                    type="button"
+                                    className="ml-1 text-muted-foreground hover:text-destructive"
+                                    onClick={() => handleRemoveTag(tag)}
+                                    tabIndex={-1}
+                                  >
+                                    <X className="w-3 h-3" />
+                                  </button>
+                                </span>
+                              ))}
+                            </div>
+                            <Input
+                              placeholder="Enter tags and press comma"
+                              value={inputValue}
+                              onChange={handleInputChange}
+                              onKeyDown={handleInputKeyDown}
+                            />
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    );
+                  }}
                 />
               </CardContent>
             </Card>
@@ -357,7 +457,7 @@ const ProductFormDialog = ({
               >
                 Cancel
               </Button>
-              <Button type="submit">
+              <Button disabled={form.formState.isSubmitting} type="submit">
                 {mode === "add" ? "Add Product" : "Update Product"}
               </Button>
             </div>
