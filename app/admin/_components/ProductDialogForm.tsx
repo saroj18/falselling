@@ -53,7 +53,7 @@ const ProductFormDialog = ({
       category: product?.category ?? "Lighting",
       price: product?.price ?? 1000,
       stock: product?.stock ?? 112,
-      status: "in-stock",
+      status: "in_stock",
       description: "this is a demo description for a test product",
       weight: 12,
       dimensions: "12*14",
@@ -197,11 +197,11 @@ const ProductFormDialog = ({
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value="in-stock">In Stock</SelectItem>
-                            <SelectItem value="out-of-stock">
+                            <SelectItem value="in_stock">In Stock</SelectItem>
+                            <SelectItem value="out_of_stock">
                               Out of Stock
                             </SelectItem>
-                            <SelectItem value="low-stock">Low Stock</SelectItem>
+                            <SelectItem value="low_stock">Low Stock</SelectItem>
                           </SelectContent>
                         </Select>
                         <FormMessage />

@@ -8,7 +8,7 @@ export const productSchema = z.object({
     .min(1, "Price must be greater than 1")
     .nonnegative("price must be non-negative number"),
   stock: z.coerce.number().min(1, "stock must be greater than 1"),
-  status: z.enum(["in-stock", "low-stock", "out-of-stock"]),
+  status: z.enum(["in_stock", "low_stock", "out_of_stock"]),
   description: z
     .string()
     .min(5, "description must be greater than 5 character"),

@@ -13,6 +13,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum STATUS {
+  in_stock
+  low_stock
+  out_of_stock
+}
+
 model User {
   id         String      @id @default(uuid())
   email      String      @unique
@@ -29,7 +35,7 @@ model Product {
   category    String
   price       Float
   stock       Int
-  status      String   // "In Stock", "Low Stock", "Out of Stock"
+  status      STATUS
   description String
   weight      Float
   dimensions  String
@@ -41,3 +47,4 @@ model Product {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
+
