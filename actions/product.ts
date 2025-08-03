@@ -42,7 +42,27 @@ export async function addProduct(productInfo: ProductFormData) {
 export const getAllProducts = async (): Promise<Response<IProduct[]>> => {
   try {
     const products = (await prisma.product.findMany()) as IProduct[];
-    console.log("ddd>>>>>>>>>>>>>>>", products);
+    return {
+      message: "",
+      success: true,
+      data: products,
+    };
+  } catch (error: any) {
+    return {
+      message: error.message || "internal server error",
+      success: false,
+      data: null,
+    };
+  }
+};
+
+export const getSingleProduct = async (
+  id: string
+): Promise<Response<IProduct>> => {
+  try {
+    const products = (await prisma.product.findUnique({
+      where: { id },
+    })) as IProduct;
     return {
       message: "",
       success: true,

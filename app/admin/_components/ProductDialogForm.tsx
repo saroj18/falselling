@@ -29,13 +29,14 @@ import { Package, Upload, X } from "lucide-react";
 import { useRef, useState } from "react";
 import { ProductFormData, productSchema } from "@/zod-schema/product";
 import Image from "next/image";
-import { addProduct } from "@/actions/product";
+import { addProduct, getSingleProduct } from "@/actions/product";
+import { IProduct } from "@/types/product";
 
 interface ProductFormDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   mode: "add" | "edit";
-  product: ProductFormData;
+  product: IProduct;
 }
 
 const ProductFormDialog = ({
@@ -45,6 +46,7 @@ const ProductFormDialog = ({
   product,
 }: ProductFormDialogProps) => {
   const imageRef = useRef<HTMLInputElement | null>(null);
+  // const { data: product } = await getSingleProduct(id);
 
   const form = useForm<ProductFormData>({
     resolver: zodResolver(productSchema) as any,
@@ -53,15 +55,16 @@ const ProductFormDialog = ({
       category: product?.category ?? "Lighting",
       price: product?.price ?? 1000,
       stock: product?.stock ?? 112,
-      status: "in_stock",
-      description: "this is a demo description for a test product",
-      weight: 12,
-      dimensions: "12*14",
-      sku: "ssk",
-      brand: "sony",
-      warranty: "2",
-      tags: ["okya", "cheap", "quality"],
-      images: undefined,
+      status: product?.status ?? "in_stock",
+      description:
+        product?.description ?? "this is a demo description for a test product",
+      weight: product?.weight ?? 12,
+      dimensions: product?.dimensions ?? "12*14",
+      sku: product?.sku ?? "ssk",
+      brand: product?.brand ?? "sony",
+      warranty: product?.warranty ?? "2",
+      tags: product?.tags ?? ["okya", "cheap", "quality"],
+      images: product?.images ?? undefined,
     },
   });
   const categories = [

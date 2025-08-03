@@ -1,25 +1,29 @@
-"use client"
+"use client";
 
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Package, Edit, Trash2, Star, Share, Eye } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { IProduct } from "@/types/product";
+import Image from "next/image";
 
 interface ProductDetailsDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  product: {
-    id: number;
-    name: string;
-    category: string;
-    price: string;
-    stock: number;
-    status: string;
-  } | null;
+  product: IProduct;
 }
 
-const ProductDetailsDialog = ({ open, onOpenChange, product }: ProductDetailsDialogProps) => {
+const ProductDetailsDialog = ({
+  open,
+  onOpenChange,
+  product,
+}: ProductDetailsDialogProps) => {
   if (!product) return null;
 
   return (
@@ -35,10 +39,13 @@ const ProductDetailsDialog = ({ open, onOpenChange, product }: ProductDetailsDia
         <div className="space-y-6">
           {/* Action Bar */}
           <div className="flex items-center justify-between border-b pb-4">
-            <Badge 
+            <Badge
               variant={
-                product.status === 'In Stock' ? 'default' : 
-                product.status === 'Low Stock' ? 'secondary' : 'destructive'
+                product.status === "in_stock"
+                  ? "default"
+                  : product.status === "low_stock"
+                  ? "secondary"
+                  : "destructive"
               }
               className="text-sm"
             >
@@ -69,13 +76,28 @@ const ProductDetailsDialog = ({ open, onOpenChange, product }: ProductDetailsDia
             <Card>
               <CardContent className="p-6">
                 <div className="space-y-4">
-                  <div className="aspect-square bg-muted rounded-lg flex items-center justify-center">
-                    <Package className="h-24 w-24 text-muted-foreground" />
+                  <div className=" bg-muted rounded-lg flex items-center justify-center">
+                    <Image
+                      width={900}
+                      height={900}
+                      alt="product images"
+                      src={product.images[0]}
+                      className="rounded-lg"
+                    />
                   </div>
                   <div className="grid grid-cols-4 gap-2">
-                    {[1, 2, 3, 4].map((i) => (
-                      <div key={i} className="aspect-square bg-muted rounded border-2 border-transparent hover:border-primary cursor-pointer flex items-center justify-center">
-                        <Package className="h-6 w-6 text-muted-foreground" />
+                    {product.images?.map((image: string, i: number) => (
+                      <div
+                        key={i}
+                        className=" bg-muted rounded border-2 border-transparent hover:border-primary cursor-pointer flex items-center justify-center"
+                      >
+                        <Image
+                          width={200}
+                          height={200}
+                          alt="product images"
+                          src={image}
+                          className="rounded-lg"
+                        />
                       </div>
                     ))}
                   </div>
@@ -91,26 +113,42 @@ const ProductDetailsDialog = ({ open, onOpenChange, product }: ProductDetailsDia
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div>
-                    <label className="text-sm font-medium text-muted-foreground">Product Name</label>
+                    <label className="text-sm font-medium text-muted-foreground">
+                      Product Name
+                    </label>
                     <p className="text-lg font-semibold">{product.name}</p>
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-muted-foreground">Category</label>
+                    <label className="text-sm font-medium text-muted-foreground">
+                      Category
+                    </label>
                     <p className="text-sm">{product.category}</p>
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="text-sm font-medium text-muted-foreground">Price</label>
-                      <p className="text-xl font-bold text-primary">{product.price}</p>
+                      <label className="text-sm font-medium text-muted-foreground">
+                        Price
+                      </label>
+                      <p className="text-xl font-bold text-primary">
+                        {product.price}
+                      </p>
                     </div>
                     <div>
-                      <label className="text-sm font-medium text-muted-foreground">Stock</label>
-                      <p className="text-lg font-semibold">{product.stock} units</p>
+                      <label className="text-sm font-medium text-muted-foreground">
+                        Stock
+                      </label>
+                      <p className="text-lg font-semibold">
+                        {product.stock} units
+                      </p>
                     </div>
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-muted-foreground">SKU</label>
-                    <p className="text-sm font-mono">PRD-{product.id.toString().padStart(4, '0')}</p>
+                    <label className="text-sm font-medium text-muted-foreground">
+                      SKU
+                    </label>
+                    <p className="text-sm font-mono">
+                      PRD-{product.id.toString().padStart(4, "0")}
+                    </p>
                   </div>
                 </CardContent>
               </Card>
@@ -123,12 +161,17 @@ const ProductDetailsDialog = ({ open, onOpenChange, product }: ProductDetailsDia
                   <div className="flex items-center space-x-2 mb-3">
                     <div className="flex items-center">
                       {[1, 2, 3, 4, 5].map((star) => (
-                        <Star key={star} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                        <Star
+                          key={star}
+                          className="h-4 w-4 fill-yellow-400 text-yellow-400"
+                        />
                       ))}
                     </div>
                     <span className="text-sm font-medium">4.8 out of 5</span>
                   </div>
-                  <p className="text-sm text-muted-foreground">Based on 156 reviews</p>
+                  <p className="text-sm text-muted-foreground">
+                    Based on 156 reviews
+                  </p>
                 </CardContent>
               </Card>
             </div>
@@ -141,10 +184,7 @@ const ProductDetailsDialog = ({ open, onOpenChange, product }: ProductDetailsDia
             </CardHeader>
             <CardContent>
               <p className="text-sm leading-relaxed">
-                This high-quality {product.name} is perfect for modern ceiling installations. 
-                Made with premium materials and designed for durability, it offers excellent 
-                acoustic properties and easy installation. Suitable for both residential and 
-                commercial applications.
+               {product.description}
               </p>
             </CardContent>
           </Card>
@@ -157,24 +197,30 @@ const ProductDetailsDialog = ({ open, onOpenChange, product }: ProductDetailsDia
               </CardHeader>
               <CardContent className="space-y-3">
                 <div className="flex justify-between">
-                  <span className="text-sm text-muted-foreground">Material</span>
-                  <span className="text-sm font-medium">Gypsum</span>
+                  <span className="text-sm text-muted-foreground">
+                    Material
+                  </span>
+                  <span className="text-sm font-medium">{product.category}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-sm text-muted-foreground">Dimensions</span>
-                  <span className="text-sm font-medium">60cm × 60cm × 2cm</span>
+                  <span className="text-sm text-muted-foreground">
+                    Dimensions
+                  </span>
+                  <span className="text-sm font-medium">{product.dimensions}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-sm text-muted-foreground">Weight</span>
-                  <span className="text-sm font-medium">2.5 kg</span>
+                  <span className="text-sm font-medium">{product.weight} kg</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-sm text-muted-foreground">Color</span>
                   <span className="text-sm font-medium">White</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-sm text-muted-foreground">Warranty</span>
-                  <span className="text-sm font-medium">2 years</span>
+                  <span className="text-sm text-muted-foreground">
+                    Warranty
+                  </span>
+                  <span className="text-sm font-medium">{product.warranty} years</span>
                 </div>
               </CardContent>
             </Card>
@@ -185,7 +231,9 @@ const ProductDetailsDialog = ({ open, onOpenChange, product }: ProductDetailsDia
               </CardHeader>
               <CardContent className="space-y-3">
                 <div className="flex justify-between">
-                  <span className="text-sm text-muted-foreground">Total Sales</span>
+                  <span className="text-sm text-muted-foreground">
+                    Total Sales
+                  </span>
                   <span className="text-sm font-medium">1,247 units</span>
                 </div>
                 <div className="flex justify-between">
@@ -193,15 +241,21 @@ const ProductDetailsDialog = ({ open, onOpenChange, product }: ProductDetailsDia
                   <span className="text-sm font-medium">$32,421.53</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-sm text-muted-foreground">Last Sale</span>
+                  <span className="text-sm text-muted-foreground">
+                    Last Sale
+                  </span>
                   <span className="text-sm font-medium">2 hours ago</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-sm text-muted-foreground">Views (30 days)</span>
+                  <span className="text-sm text-muted-foreground">
+                    Views (30 days)
+                  </span>
                   <span className="text-sm font-medium">3,456</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-sm text-muted-foreground">Conversion Rate</span>
+                  <span className="text-sm text-muted-foreground">
+                    Conversion Rate
+                  </span>
                   <span className="text-sm font-medium">12.3%</span>
                 </div>
               </CardContent>
