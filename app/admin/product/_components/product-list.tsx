@@ -1,7 +1,16 @@
 "use client";
 
 import { useState } from "react";
-import { Plus, Search, Filter, Eye, Edit, Trash2, Package } from "lucide-react";
+import {
+  Plus,
+  Search,
+  Filter,
+  Eye,
+  Edit,
+  Trash2,
+  Package,
+  RefreshCcw,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
@@ -10,6 +19,8 @@ import ProductDetailsDialog from "../../_components/ProductDetailsDialogBox";
 import ProductFormDialog from "../../_components/ProductDialogForm";
 import { IProduct } from "@/types/product";
 import Image from "next/image";
+import { deleteProduct } from "@/actions/product";
+import { toast } from "sonner";
 
 type ProductsContentProps = {
   products: IProduct[];
@@ -20,6 +31,7 @@ const ProductsContent = ({ products }: ProductsContentProps) => {
   const [productFormOpen, setProductFormOpen] = useState(false);
   const [productDetailsOpen, setProductDetailsOpen] = useState(false);
   const [formMode, setFormMode] = useState<"add" | "edit">("add");
+  const [loading, setLoading] = useState(false);
 
   const handleAddProduct = () => {
     setSelectedProduct(null);
@@ -31,6 +43,15 @@ const ProductsContent = ({ products }: ProductsContentProps) => {
     setFormMode("edit");
     setSelectedProduct(product);
     setProductFormOpen(true);
+  };
+
+  const handleDeleteProduct = async (id: string) => {
+    setLoading(true);
+    const response = await deleteProduct(id);
+    if (response.success) {
+      toast.success("product deleted successfully");
+    }
+    setLoading(false);
   };
 
   const handleViewProduct = (product: any) => {
@@ -130,7 +151,11 @@ const ProductsContent = ({ products }: ProductsContentProps) => {
                         >
                           <Edit className="h-4 w-4" />
                         </Button>
-                        <Button variant="ghost" size="sm">
+                        <Button
+                          onClick={() => handleDeleteProduct(product.id)}
+                          variant="ghost"
+                          size="sm"
+                        >
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>

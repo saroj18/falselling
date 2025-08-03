@@ -103,3 +103,24 @@ export const updateProduct = async (
     };
   }
 };
+
+export const deleteProduct = async (id: string) => {
+  try {
+    const product = await prisma.product.delete({ where: { id } });
+    if (!product) {
+      throw new Error("failed to delete product on db");
+    }
+    revalidatePath("/dashboard/product");
+    return {
+      message: "product deleted successfully",
+      success: true,
+      data: product,
+    };
+  } catch (error: any) {
+    return {
+      message: error.message || "internal server error",
+      success: false,
+      data: null,
+    };
+  }
+};
