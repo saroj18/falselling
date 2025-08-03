@@ -22,6 +22,7 @@ const ProductsContent = ({ products }: ProductsContentProps) => {
   const [formMode, setFormMode] = useState<"add" | "edit">("add");
 
   const handleAddProduct = () => {
+    setSelectedProduct(null);
     setFormMode("add");
     setProductFormOpen(true);
   };
@@ -125,7 +126,7 @@ const ProductsContent = ({ products }: ProductsContentProps) => {
                         <Button
                           variant="ghost"
                           size="sm"
-                          onClick={() => handleEditProduct(product.id)}
+                          onClick={() => handleEditProduct(product)}
                         >
                           <Edit className="h-4 w-4" />
                         </Button>

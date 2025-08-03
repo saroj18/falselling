@@ -183,9 +183,7 @@ const ProductDetailsDialog = ({
               <CardTitle>Description</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm leading-relaxed">
-               {product.description}
-              </p>
+              <p className="text-sm leading-relaxed">{product.description}</p>
             </CardContent>
           </Card>
 
@@ -200,17 +198,23 @@ const ProductDetailsDialog = ({
                   <span className="text-sm text-muted-foreground">
                     Material
                   </span>
-                  <span className="text-sm font-medium">{product.category}</span>
+                  <span className="text-sm font-medium">
+                    {product.category}
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-sm text-muted-foreground">
                     Dimensions
                   </span>
-                  <span className="text-sm font-medium">{product.dimensions}</span>
+                  <span className="text-sm font-medium">
+                    {product.dimensions}
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-sm text-muted-foreground">Weight</span>
-                  <span className="text-sm font-medium">{product.weight} kg</span>
+                  <span className="text-sm font-medium">
+                    {product.weight} kg
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-sm text-muted-foreground">Color</span>
@@ -220,7 +224,9 @@ const ProductDetailsDialog = ({
                   <span className="text-sm text-muted-foreground">
                     Warranty
                   </span>
-                  <span className="text-sm font-medium">{product.warranty} years</span>
+                  <span className="text-sm font-medium">
+                    {product.warranty} years
+                  </span>
                 </div>
               </CardContent>
             </Card>
@@ -269,12 +275,13 @@ const ProductDetailsDialog = ({
             </CardHeader>
             <CardContent>
               <div className="flex flex-wrap gap-2">
-                <Badge variant="outline">ceiling</Badge>
-                <Badge variant="outline">acoustic</Badge>
-                <Badge variant="outline">gypsum</Badge>
-                <Badge variant="outline">commercial</Badge>
-                <Badge variant="outline">residential</Badge>
-                <Badge variant="outline">fire-resistant</Badge>
+                {product.tags?.map((tag, index) => {
+                  return (
+                    <Badge key={index} variant="outline">
+                      {tag}
+                    </Badge>
+                  );
+                })}
               </div>
             </CardContent>
           </Card>

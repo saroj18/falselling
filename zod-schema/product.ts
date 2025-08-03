@@ -32,4 +32,10 @@ export const productSchema = z.object({
   ),
 });
 
+export const productSchemaUpdate = productSchema.extend({
+  images: z.any().optional(),
+  id:z.string()
+});
+
 export type ProductFormData = z.infer<typeof productSchema>;
+export type ProductFormUpdateData = z.infer<typeof productSchemaUpdate>;

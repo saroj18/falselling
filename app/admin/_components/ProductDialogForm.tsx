@@ -1,3 +1,5 @@
+"use client";
+
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -26,11 +28,16 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Package, Upload, X } from "lucide-react";
-import { useRef, useState } from "react";
-import { ProductFormData, productSchema } from "@/zod-schema/product";
+import { useEffect, useRef, useState } from "react";
+import {
+  ProductFormData,
+  productSchema,
+  productSchemaUpdate,
+} from "@/zod-schema/product";
 import Image from "next/image";
-import { addProduct, getSingleProduct } from "@/actions/product";
+import { addProduct, updateProduct } from "@/actions/product";
 import { IProduct } from "@/types/product";
+import { toast } from "sonner";
 
 interface ProductFormDialogProps {
   open: boolean;
@@ -45,14 +52,16 @@ const ProductFormDialog = ({
   mode,
   product,
 }: ProductFormDialogProps) => {
+  console.log(product);
   const imageRef = useRef<HTMLInputElement | null>(null);
-  // const { data: product } = await getSingleProduct(id);
 
   const form = useForm<ProductFormData>({
-    resolver: zodResolver(productSchema) as any,
+    resolver: zodResolver(
+      mode == "add" ? productSchema : productSchemaUpdate
+    ) as any,
     defaultValues: {
-      name: product?.name ?? "Test Product",
-      category: product?.category ?? "Lighting",
+      name: product?.name || "Test Product6",
+      category: product?.category || "Lighting",
       price: product?.price ?? 1000,
       stock: product?.stock ?? 112,
       status: product?.status ?? "in_stock",
@@ -67,6 +76,7 @@ const ProductFormDialog = ({
       images: product?.images ?? undefined,
     },
   });
+
   const categories = [
     "Ceiling Tiles",
     "Wall Panels",
@@ -75,11 +85,28 @@ const ProductFormDialog = ({
   ];
 
   const onSubmit = async (data: ProductFormData) => {
-    console.log("Product data:", data);
-    await addProduct(data);
+    if (mode == "add") {
+      console.log("Product data:", data);
+      const response = await addProduct(data);
+      if (response.success) {
+        toast.success("Product added successfully");
+      }
+    } else {
+      
+      const response = await updateProduct({ data });
+      if (response.success) {
+        toast.success("Product updated successfully");
+      }
+    }
     onOpenChange(false);
     form.reset();
   };
+
+  useEffect(() => {
+    if (product) {
+      form.reset(product);
+    }
+  }, [form, product]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -272,9 +299,9 @@ const ProductFormDialog = ({
                     />
                   </div>
 
-                  {form.watch("images")?.length > 0 && (
+                  {/* {form.watch("images")?.length > 0 && (
                     <div className="grid grid-cols-2 gap-4">
-                      {Array.from(form.getValues("images")).map(
+                      {Array.from(form.getValues("images"))?.map(
                         (img, index) => (
                           <div key={index} className="relative group">
                             <div className=" border-4 border-green-400 bg-muted rounded-lg flex items-center justify-center">
@@ -289,6 +316,23 @@ const ProductFormDialog = ({
                           </div>
                         )
                       )}
+                    </div>
+                  )} */}
+                  {product?.images?.length > 0 && (
+                    <div className="grid grid-cols-2 gap-4">
+                      {product?.images.map((img: string, index: number) => (
+                        <div key={index} className="relative group">
+                          <div className=" border-4 border-green-400 bg-muted rounded-lg flex items-center justify-center">
+                            <Image
+                              width={200}
+                              height={200}
+                              alt="product images"
+                              src={img}
+                              className="rounded-lg"
+                            />
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   )}
                 </CardContent>

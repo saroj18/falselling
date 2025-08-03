@@ -76,3 +76,30 @@ export const getSingleProduct = async (
     };
   }
 };
+
+export const updateProduct = async (
+  productInfo: any
+): Promise<Response<IProduct>> => {
+  try {
+    const { id, ...updateData } = productInfo.data;
+    const product = (await prisma.product.update({
+      where: { id },
+      data: updateData,
+    })) as IProduct;
+    if (!product) {
+      throw new Error("failed to update product on db");
+    }
+    revalidatePath("/dashboard/product");
+    return {
+      message: "product updated successfully",
+      success: true,
+      data: product,
+    };
+  } catch (error: any) {
+    return {
+      message: error.message || "internal server error",
+      success: false,
+      data: null,
+    };
+  }
+};
