@@ -53,7 +53,7 @@ const Login = () => {
       if (resp?.ok) {
         toast.success("Login Successfully", { style: { color: "green" } });
         setLoading(false);
-        router.push("/");
+        router.replace("/admin");
       } else {
         toast.success(resp?.error, { style: { color: "red" } });
         setLoading(false);
