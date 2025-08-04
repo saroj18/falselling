@@ -5,7 +5,7 @@ import { prisma } from "@/utils/prisma";
 import { asyncHandler } from "@/helper/AsyncHandler";
 import { userZodSchema } from "@/zod-schema/user";
 
-export const POST = asyncHandler(async (req, context?: Promise<any>) => {
+export const POST = asyncHandler(async (req, context?: any) => {
   const { email, password, firstname, confirmPassword, lastname, phone } =
     await req.json();
   const validateInfo = await userZodSchema.parseAsync({
