@@ -37,39 +37,6 @@ const ProductDetailsDialog = ({
         </DialogHeader>
 
         <div className="space-y-6">
-          {/* Action Bar */}
-          <div className="flex items-center justify-between border-b pb-4">
-            <Badge
-              variant={
-                product.status === "in_stock"
-                  ? "default"
-                  : product.status === "low_stock"
-                  ? "secondary"
-                  : "destructive"
-              }
-              className="text-sm"
-            >
-              {product.status}
-            </Badge>
-            <div className="flex gap-2">
-              <Button variant="outline" size="sm">
-                <Eye className="h-4 w-4 mr-2" />
-                Preview
-              </Button>
-              <Button variant="outline" size="sm">
-                <Share className="h-4 w-4 mr-2" />
-                Share
-              </Button>
-              <Button variant="outline" size="sm">
-                <Edit className="h-4 w-4 mr-2" />
-                Edit
-              </Button>
-              <Button variant="destructive" size="sm">
-                <Trash2 className="h-4 w-4 mr-2" />
-                Delete
-              </Button>
-            </div>
-          </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Product Images */}

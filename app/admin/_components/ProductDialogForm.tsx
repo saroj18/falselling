@@ -46,35 +46,34 @@ interface ProductFormDialogProps {
   product: IProduct;
 }
 
+const defaultProductValues: ProductFormData = {
+  name: "Test Product",
+  category: "Lighting",
+  price: 1000,
+  stock: 112,
+  status: "in_stock",
+  description: "this is a demo description for a test product",
+  weight: 12,
+  dimensions: "12*14",
+  sku: "ssk",
+  brand: "sony",
+  warranty: "2",
+  tags: ["okya", "cheap", "quality"],
+  images: undefined,
+};
+
 const ProductFormDialog = ({
   open,
   onOpenChange,
   mode,
   product,
 }: ProductFormDialogProps) => {
-  console.log(product);
   const imageRef = useRef<HTMLInputElement | null>(null);
 
   const form = useForm<ProductFormData>({
     resolver: zodResolver(
       mode == "add" ? productSchema : productSchemaUpdate
     ) as any,
-    defaultValues: {
-      name: product?.name || "Test Product6",
-      category: product?.category || "Lighting",
-      price: product?.price ?? 1000,
-      stock: product?.stock ?? 112,
-      status: product?.status ?? "in_stock",
-      description:
-        product?.description ?? "this is a demo description for a test product",
-      weight: product?.weight ?? 12,
-      dimensions: product?.dimensions ?? "12*14",
-      sku: product?.sku ?? "ssk",
-      brand: product?.brand ?? "sony",
-      warranty: product?.warranty ?? "2",
-      tags: product?.tags ?? ["okya", "cheap", "quality"],
-      images: product?.images ?? undefined,
-    },
   });
 
   const categories = [
@@ -86,13 +85,11 @@ const ProductFormDialog = ({
 
   const onSubmit = async (data: ProductFormData) => {
     if (mode == "add") {
-      console.log("Product data:", data);
       const response = await addProduct(data);
       if (response.success) {
         toast.success("Product added successfully");
       }
     } else {
-      
       const response = await updateProduct({ data });
       if (response.success) {
         toast.success("Product updated successfully");
@@ -103,10 +100,12 @@ const ProductFormDialog = ({
   };
 
   useEffect(() => {
-    if (product) {
+    if (product && mode != "add") {
       form.reset(product);
+    } else {
+      form.reset(defaultProductValues);
     }
-  }, [form, product]);
+  }, [form, product, open]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -299,25 +298,31 @@ const ProductFormDialog = ({
                     />
                   </div>
 
-                  {/* {form.watch("images")?.length > 0 && (
+                  {form.watch("images")?.length > 0 && (
                     <div className="grid grid-cols-2 gap-4">
                       {Array.from(form.getValues("images"))?.map(
-                        (img, index) => (
-                          <div key={index} className="relative group">
-                            <div className=" border-4 border-green-400 bg-muted rounded-lg flex items-center justify-center">
-                              <Image
-                                width={200}
-                                height={200}
-                                alt="product images"
-                                src={URL.createObjectURL(img as File)}
-                                className="rounded-lg"
-                              />
+                        (img, index) => {
+                          const isFile = img instanceof File;
+                          const imageSrc = isFile
+                            ? URL.createObjectURL(img)
+                            : img;
+                          return (
+                            <div key={index} className="relative group">
+                              <div className=" border-4 border-green-400 bg-muted rounded-lg flex items-center justify-center">
+                                <Image
+                                  width={200}
+                                  height={200}
+                                  alt="product images"
+                                  src={imageSrc as any}
+                                  className="rounded-lg"
+                                />
+                              </div>
                             </div>
-                          </div>
-                        )
+                          );
+                        }
                       )}
                     </div>
-                  )} */}
+                  )}
                   {product?.images?.length > 0 && (
                     <div className="grid grid-cols-2 gap-4">
                       {product?.images.map((img: string, index: number) => (

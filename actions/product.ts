@@ -41,7 +41,9 @@ export async function addProduct(productInfo: ProductFormData) {
 
 export const getAllProducts = async (): Promise<Response<IProduct[]>> => {
   try {
-    const products = (await prisma.product.findMany()) as IProduct[];
+    const products = (await prisma.product.findMany({
+      orderBy: { createdAt: "desc" },
+    })) as IProduct[];
     return {
       message: "",
       success: true,
