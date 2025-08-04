@@ -3,11 +3,11 @@ import { ApiError } from "./ApiError";
 import { ZodError } from "zod";
 
 type FunctionType = {
-  (req: NextRequest, context: Promise<any>): Promise<NextResponse>;
+  (req: NextRequest, context: any): Promise<NextResponse>;
 };
 
 export const asyncHandler = (fn: FunctionType) => {
-  return async (req: NextRequest, context: Promise<any>) => {
+  return async (req: NextRequest, context: any) => {
     try {
       return await fn(req, context);
     } catch (error: any) {
