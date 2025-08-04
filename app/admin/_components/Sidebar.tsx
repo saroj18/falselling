@@ -12,6 +12,7 @@ import {
   LayoutDashboard,
   BarChart3,
   Bell,
+  Book,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar } from "@/components/ui/avatar";
@@ -53,6 +54,12 @@ const Sidebar = () => {
       label: "Notifications",
       icon: Bell,
       href: "/admin/notification",
+    },
+    {
+      id: "blogs",
+      label: "Blogs",
+      icon: Book,
+      href: "/admin/blogs",
     },
     {
       id: "settings",

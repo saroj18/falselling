@@ -48,3 +48,23 @@ model Product {
   updatedAt   DateTime @updatedAt
 }
 
+
+model Blog {
+  id        String   @id @default(cuid())
+  title     String
+  excerpt   String
+  content   String
+  category  String
+  author    String
+  status    BlogStatus @default(Draft)
+  featured  Boolean  @default(false)
+  tags      String[] // Array of tags
+  images    String[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum BlogStatus {
+  Draft
+  Published
+}
