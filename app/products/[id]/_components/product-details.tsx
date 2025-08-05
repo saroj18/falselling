@@ -20,7 +20,7 @@ import Image from "next/image";
 import Quote from "./quota-calculator";
 import { useState } from "react";
 
-const ProductDetail = ({ product }: { product: IProduct }) => {
+const ProductDetail = ({ product,userId }: { product: IProduct,userId:string }) => {
   const [quota, setQuota] = useState(false);
   if (!product) {
     return (
@@ -194,7 +194,7 @@ const ProductDetail = ({ product }: { product: IProduct }) => {
             </div>
           </div>
         </div>
-        {quota && <Quote product={product} />}
+        {quota && <Quote userId={userId} product={product} />}
         {/* Detailed Information Tabs */}
         <Tabs defaultValue="specifications" className="mb-12">
           <TabsList className="grid w-full grid-cols-4">

@@ -26,6 +26,7 @@ model User {
   lastname   String
   password   String
   phone      String         @unique
+  order       Order[]
 
 }
 
@@ -45,6 +46,7 @@ model Product {
   warranty    String
   images      String[]
   tags        String[] 
+  order       Order[]
   specification      String[] 
   benefits      String[] 
   applications      String[] 
@@ -72,4 +74,24 @@ model Blog {
 enum BlogStatus {
   Draft
   Published
+}
+
+model Order {
+  id        String   @id @default(cuid())
+  user_id   String 
+  orderBy   User   @relation(fields: [user_id], references: [id])
+  product_id String
+  orderedProduct Product @relation(fields: [product_id], references: [id])
+  price     String
+  discount  String
+  status    OrderStatus @default(PENDING)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum OrderStatus {
+ PENDING
+ COMPLETED
+ CANCEL
+ RECEIVED
 }

@@ -9,58 +9,39 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Calculator, Home, ArrowRight, Check } from "lucide-react";
+
+import { Home, ArrowRight } from "lucide-react";
 import { IProduct } from "@/types/product";
+import { createOrder } from "@/actions/order";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
-const materials = [
-  {
-    id: "gypsum",
-    name: "Gypsum Board",
-    price: 300,
-    features: ["Water resistant", "Fire retardant", "Easy installation"],
-  },
-  {
-    id: "pvc",
-    name: "PVC Panels",
-    price: 250,
-    features: ["Moisture proof", "Easy maintenance", "Lightweight"],
-  },
-  {
-    id: "metal",
-    name: "Metal Ceiling",
-    price: 450,
-    features: ["Durable", "Modern look", "Long lasting"],
-  },
-  {
-    id: "fiber",
-    name: "Fiber Cement",
-    price: 380,
-    features: ["Weather resistant", "Eco-friendly", "Strong"],
-  },
-  {
-    id: "wooden",
-    name: "Wooden Ceiling",
-    price: 600,
-    features: ["Premium finish", "Natural look", "Insulation"],
-  },
-];
-
-const Quote = ({ product }: { product: IProduct }) => {
+const Quote = ({ product, userId }: { product: IProduct; userId: string }) => {
   const [area, setArea] = useState("");
+  const router = useRouter();
 
   const estimatedPrice = area
     ? parseFloat(area) * product.price -
       (product.price * product.discount) / 100
     : 0;
 
-  const handleGetDetailedQuote = () => {};
+  const handleGetDetailedQuote = async () => {
+    if (!userId) {
+      router.push("/login");
+      return;
+    }
+    const response = await createOrder({
+      discount: String(product.discount),
+      price: String(estimatedPrice),
+      product_id: product.id,
+      user_id: userId,
+    });
+    if (response.success) {
+      toast.success("order created successfully");
+    } else {
+      toast.error("failed to create order");
+    }
+  };
 
   return (
     <div className="my-4 gap-8">

@@ -1,7 +1,5 @@
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import GoogleProvider from "next-auth/providers/google";
-import GithubProvider from "next-auth/providers/github";
 import bcrypt from "bcrypt";
 import { ApiError } from "@/helper/ApiError";
 import { prisma } from "./prisma";
@@ -13,11 +11,11 @@ export const authOptions: NextAuthOptions = {
       name: "Credentials",
       credentials: {
         phone: { label: "Phone", type: "text", placeholder: "jsmith" },
+        id: { label: "Id", type: "text", placeholder: "jsmith" },
         email: { label: "Email", type: "text", placeholder: "jsmith" },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        console.log(credentials);
         if (!credentials) {
           throw new ApiError("Invalid credentials");
         }
@@ -44,14 +42,6 @@ export const authOptions: NextAuthOptions = {
         return checkUser;
       },
     }),
-    // GoogleProvider({
-    //   clientId: env.GOOGLE_CLIENT_ID as string,
-    //   clientSecret: env.GOOGLE_CLIENT_SECRET as string,
-    // }),
-    // GithubProvider({
-    //   clientId: env.GITHUB_CLIENT_ID as string,
-    //   clientSecret: env.GITHUB_CLIENT_SECRET as string,
-    // }),
   ],
   callbacks: {
     async jwt({ token, user, account }) {
@@ -65,6 +55,7 @@ export const authOptions: NextAuthOptions = {
     session({ session, token }) {
       session.user!.email = token.email as string;
       session.user!.name = token.name as string;
+      (session.user as any).id = token.userId as string;
       return session;
     },
   },

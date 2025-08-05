@@ -1,26 +1,72 @@
-"use client"
+"use client";
 
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import * as React from "react";
 import { Badge } from "@/components/ui/badge";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { Package2, User, MapPin, Calendar, DollarSign, Truck } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+
+import { Package2, User, MapPin, Calendar, Truck } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { IOrder, StatusType } from "@/types/order";
+import { changeStatus } from "@/actions/order";
+import { toast } from "sonner";
 
 interface OrderDetailsDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  order: {
-    id: string;
-    customer: string;
-    product: string;
-    amount: string;
-    status: string;
-    date: string;
-  } | null;
+  order: IOrder;
 }
 
-const OrderDetailsDialog = ({ open, onOpenChange, order }: OrderDetailsDialogProps) => {
+const OrderDetailsDialog = ({
+  open,
+  onOpenChange,
+  order,
+}: OrderDetailsDialogProps) => {
+  const [position, setPosition] = React.useState("PENDING");
+  const [dialog, setDialog] = React.useState(false);
+
   if (!order) return null;
+
+  const clickHandler = async () => {
+    try {
+      const response = await changeStatus(order.id, position as StatusType);
+      if (response.success) {
+        toast.success(`change status successfully (${position})`);
+        setDialog(false);
+      } else {
+        toast.success(`change status failed`);
+      }
+    } catch (error: any) {
+      console.log(error.message);
+    } finally {
+      setDialog(false);
+    }
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -35,20 +81,60 @@ const OrderDetailsDialog = ({ open, onOpenChange, order }: OrderDetailsDialogPro
         <div className="space-y-6">
           {/* Order Status */}
           <div className="flex items-center justify-between">
-            <Badge 
+            <Badge
               variant={
-                order.status === 'Completed' ? 'default' : 
-                order.status === 'Processing' || order.status === 'Shipped' ? 'secondary' : 
-                order.status === 'Cancelled' ? 'destructive' : 'outline'
+                order.status === "COMPLETED"
+                  ? "default"
+                  : order.status === "PENDING"
+                  ? "secondary"
+                  : order.status === "CANCEL"
+                  ? "destructive"
+                  : "outline"
               }
               className="text-sm"
             >
               {order.status}
             </Badge>
             <div className="flex gap-2">
-              <Button variant="outline" size="sm">
-                Update Status
-              </Button>
+              <AlertDialog open={dialog}>
+                <AlertDialogTrigger asChild>
+                  <Button
+                    onClick={() => setDialog(true)}
+                    variant="default"
+                    size="sm"
+                  >
+                    Change Status
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Change Order Status</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      <Select value={position} onValueChange={setPosition}>
+                        <SelectTrigger className="w-[180px]">
+                          <SelectValue placeholder="Select a Status" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectGroup>
+                            <SelectLabel>Status</SelectLabel>
+                            <SelectItem value="RECEIVED">Received</SelectItem>
+                            <SelectItem value="COMPLETED">Completed</SelectItem>
+                            <SelectItem value="CANCEL">Cancel</SelectItem>
+                            <SelectItem value="PENDING">Pending</SelectItem>
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel onClick={()=>setDialog(false)}>Exit</AlertDialogCancel>
+                    <AlertDialogAction onClick={clickHandler}>
+                      Change
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+
               <Button variant="outline" size="sm">
                 Print Invoice
               </Button>
@@ -66,16 +152,24 @@ const OrderDetailsDialog = ({ open, onOpenChange, order }: OrderDetailsDialogPro
               </CardHeader>
               <CardContent className="space-y-3">
                 <div>
-                  <label className="text-sm font-medium text-muted-foreground">Name</label>
-                  <p className="text-sm">{order.customer}</p>
+                  <label className="text-sm font-medium text-muted-foreground">
+                    Name
+                  </label>
+                  <p className="text-sm">
+                    {order.orderBy.firstname + " " + order.orderBy.lastname}
+                  </p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-muted-foreground">Email</label>
-                  <p className="text-sm">john.doe@example.com</p>
+                  <label className="text-sm font-medium text-muted-foreground">
+                    Email
+                  </label>
+                  <p className="text-sm">{order.orderBy.email}</p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-muted-foreground">Phone</label>
-                  <p className="text-sm">+1 (555) 123-4567</p>
+                  <label className="text-sm font-medium text-muted-foreground">
+                    Phone
+                  </label>
+                  <p className="text-sm">{order.orderBy.phone}</p>
                 </div>
               </CardContent>
             </Card>
@@ -90,16 +184,24 @@ const OrderDetailsDialog = ({ open, onOpenChange, order }: OrderDetailsDialogPro
               </CardHeader>
               <CardContent className="space-y-3">
                 <div>
-                  <label className="text-sm font-medium text-muted-foreground">Order Date</label>
-                  <p className="text-sm">{order.date}</p>
+                  <label className="text-sm font-medium text-muted-foreground">
+                    Order Date
+                  </label>
+                  <p className="text-sm">
+                    {new Date(order.createdAt).toLocaleDateString()}
+                  </p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-muted-foreground">Payment Method</label>
-                  <p className="text-sm">Credit Card (**** 1234)</p>
+                  <label className="text-sm font-medium text-muted-foreground">
+                    Payment Method
+                  </label>
+                  <p className="text-sm">Cash on Delivery</p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-muted-foreground">Total Amount</label>
-                  <p className="text-sm font-semibold">{order.amount}</p>
+                  <label className="text-sm font-medium text-muted-foreground">
+                    Total Amount
+                  </label>
+                  <p className="text-sm font-semibold">{order.price}</p>
                 </div>
               </CardContent>
             </Card>
@@ -139,13 +241,23 @@ const OrderDetailsDialog = ({ open, onOpenChange, order }: OrderDetailsDialogPro
                       <Package2 className="h-6 w-6" />
                     </div>
                     <div>
-                      <p className="font-medium">{order.product}</p>
-                      <p className="text-sm text-muted-foreground">Quantity: 2</p>
+                      <p className="font-medium">{order.orderedProduct.name}</p>
+                      <p className="text-sm text-muted-foreground">
+                        Quantity: 2 sq/ft
+                      </p>
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="font-medium">$75.00</p>
-                    <p className="text-sm text-muted-foreground">$37.50 each</p>
+                    <p className="font-medium">Rs. {order.price}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {Number(order.discount) > 0
+                        ? order.orderedProduct.price -
+                          (order.orderedProduct.price *
+                            Number(order.discount)) /
+                            100
+                        : order.orderedProduct.price + " "}
+                      per sq/ft
+                    </p>
                   </div>
                 </div>
               </div>
@@ -166,20 +278,26 @@ const OrderDetailsDialog = ({ open, onOpenChange, order }: OrderDetailsDialogPro
                   <div className="h-2 w-2 bg-primary rounded-full"></div>
                   <div className="flex-1">
                     <p className="text-sm font-medium">Order Placed</p>
-                    <p className="text-xs text-muted-foreground">{order.date} at 2:30 PM</p>
+                    <p className="text-xs text-muted-foreground">
+                      Reach Out Soon
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-3">
                   <div className="h-2 w-2 bg-primary rounded-full"></div>
                   <div className="flex-1">
-                    <p className="text-sm font-medium">Payment Confirmed</p>
-                    <p className="text-xs text-muted-foreground">{order.date} at 2:35 PM</p>
+                    <p className="text-sm font-medium">Payment</p>
+                    <p className="text-xs text-muted-foreground">
+                      Cash on Delivery
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-3">
                   <div className="h-2 w-2 bg-muted rounded-full"></div>
                   <div className="flex-1">
-                    <p className="text-sm font-medium text-muted-foreground">Order Shipped</p>
+                    <p className="text-sm font-medium text-muted-foreground">
+                      Order Shipped
+                    </p>
                     <p className="text-xs text-muted-foreground">Pending</p>
                   </div>
                 </div>
