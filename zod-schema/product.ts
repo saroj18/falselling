@@ -7,6 +7,10 @@ export const productSchema = z.object({
     .number()
     .min(1, "Price must be greater than 1")
     .nonnegative("price must be non-negative number"),
+  discount: z.coerce
+    .number()
+    .nonnegative("discount must be non-negative number")
+    .default(0),
   stock: z.coerce.number().min(1, "stock must be greater than 1"),
   status: z.enum(["in_stock", "low_stock", "out_of_stock"]),
   description: z
@@ -18,6 +22,10 @@ export const productSchema = z.object({
   brand: z.string().optional(),
   warranty: z.string(),
   tags: z.array(z.string()).optional(),
+  specification: z.array(z.string()).optional(),
+  benefits: z.array(z.string()).optional(),
+  applications: z.array(z.string()).optional(),
+  installation: z.array(z.string()).optional(),
   images: z.any().refine(
     (value) => {
       if (typeof window !== "undefined" && value instanceof FileList) {
@@ -34,7 +42,7 @@ export const productSchema = z.object({
 
 export const productSchemaUpdate = productSchema.extend({
   images: z.any().optional(),
-  id:z.string()
+  id: z.string(),
 });
 
 export type ProductFormData = z.infer<typeof productSchema>;

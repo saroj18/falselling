@@ -278,12 +278,10 @@ const Products = ({ products }: { products: IProduct[] }) => {
                         <Badge className="absolute top-3 left-3 bg-red-500 hover:bg-red-600">
                           Popular
                         </Badge>
-                      )}
-                      {product.discount && (
+                      )} */}
                         <Badge className="absolute top-3 right-3 bg-green-500 hover:bg-green-600">
                           {product.discount}
                         </Badge>
-                      )} */}
                       
                     </div>
                   </CardHeader>

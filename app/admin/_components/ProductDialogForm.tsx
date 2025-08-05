@@ -60,6 +60,11 @@ const defaultProductValues: ProductFormData = {
   warranty: "2",
   tags: ["okya", "cheap", "quality"],
   images: undefined,
+  discount: 5,
+  applications: ["okya", "cheap", "quality"],
+  benefits: ["okya", "cheap", "quality"],
+  installation: ["okya", "cheap", "quality"],
+  specification: ["okya", "cheap", "quality"],
 };
 
 const ProductFormDialog = ({
@@ -84,6 +89,7 @@ const ProductFormDialog = ({
   ];
 
   const onSubmit = async (data: ProductFormData) => {
+    console.log("data>>>>", data);
     if (mode == "add") {
       const response = await addProduct(data);
       if (response.success) {
@@ -210,33 +216,57 @@ const ProductFormDialog = ({
                     />
                   </div>
 
-                  <FormField
-                    control={form.control}
-                    name="status"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Status</FormLabel>
-                        <Select
-                          onValueChange={field.onChange}
-                          value={field.value}
-                        >
-                          <FormControl className="w-full">
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select status" />
-                            </SelectTrigger>
+                  <div className="grid grid-cols-2 gap-4">
+                    <FormField
+                      control={form.control}
+                      name="status"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Status</FormLabel>
+                          <Select
+                            onValueChange={field.onChange}
+                            value={field.value}
+                          >
+                            <FormControl className="w-full">
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select status" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="in_stock">In Stock</SelectItem>
+                              <SelectItem value="out_of_stock">
+                                Out of Stock
+                              </SelectItem>
+                              <SelectItem value="low_stock">
+                                Low Stock
+                              </SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="discount"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Discount</FormLabel>
+                          <FormControl>
+                            <Input
+                              type="number"
+                              placeholder="0"
+                              {...field}
+                              onChange={(e) =>
+                                field.onChange(parseInt(e.target.value) || 0)
+                              }
+                            />
                           </FormControl>
-                          <SelectContent>
-                            <SelectItem value="in_stock">In Stock</SelectItem>
-                            <SelectItem value="out_of_stock">
-                              Out of Stock
-                            </SelectItem>
-                            <SelectItem value="low_stock">Low Stock</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
 
                   <FormField
                     control={form.control}
@@ -486,6 +516,315 @@ const ProductFormDialog = ({
                             </div>
                             <Input
                               placeholder="Enter tags and press comma"
+                              value={inputValue}
+                              onChange={handleInputChange}
+                              onKeyDown={handleInputKeyDown}
+                            />
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    );
+                  }}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="specification"
+                  render={({ field }) => {
+                    const [inputValue, setInputValue] = useState("");
+                    const tags = field.value || [];
+
+                    const handleInputChange = (
+                      e: React.ChangeEvent<HTMLInputElement>
+                    ) => {
+                      setInputValue(e.target.value);
+                    };
+
+                    const handleInputKeyDown = (
+                      e: React.KeyboardEvent<HTMLInputElement>
+                    ) => {
+                      if (e.key === "," || e.key === "Enter") {
+                        e.preventDefault();
+                        const newTag = inputValue.trim().replace(/,$/, "");
+                        if (newTag && !tags.includes(newTag)) {
+                          const newTags = [...tags, newTag];
+                          field.onChange(newTags);
+                        }
+                        setInputValue("");
+                      } else if (
+                        e.key === "Backspace" &&
+                        !inputValue &&
+                        tags.length > 0
+                      ) {
+                        const newTags = tags.slice(0, -1);
+                        field.onChange(newTags);
+                      }
+                    };
+
+                    const handleRemoveTag = (tagToRemove: string) => {
+                      const newTags = tags.filter(
+                        (tag: string) => tag !== tagToRemove
+                      );
+                      field.onChange(newTags);
+                    };
+
+                    return (
+                      <FormItem>
+                        <FormLabel>Specification</FormLabel>
+                        <FormControl>
+                          <div>
+                            <div className="flex flex-wrap gap-2 mb-2">
+                              {tags.map((tag: string, idx: number) => (
+                                <span
+                                  key={idx}
+                                  className="flex items-center bg-muted px-2 py-1 rounded text-sm"
+                                >
+                                  {tag}
+                                  <button
+                                    type="button"
+                                    className="ml-1 text-muted-foreground hover:text-destructive"
+                                    onClick={() => handleRemoveTag(tag)}
+                                    tabIndex={-1}
+                                  >
+                                    <X className="w-3 h-3" />
+                                  </button>
+                                </span>
+                              ))}
+                            </div>
+                            <Input
+                              placeholder="Enter specification and press comma"
+                              value={inputValue}
+                              onChange={handleInputChange}
+                              onKeyDown={handleInputKeyDown}
+                            />
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    );
+                  }}
+                />
+                <FormField
+                  control={form.control}
+                  name="benefits"
+                  render={({ field }) => {
+                    const [inputValue, setInputValue] = useState("");
+                    const tags = field.value || [];
+
+                    const handleInputChange = (
+                      e: React.ChangeEvent<HTMLInputElement>
+                    ) => {
+                      setInputValue(e.target.value);
+                    };
+
+                    const handleInputKeyDown = (
+                      e: React.KeyboardEvent<HTMLInputElement>
+                    ) => {
+                      if (e.key === "," || e.key === "Enter") {
+                        e.preventDefault();
+                        const newTag = inputValue.trim().replace(/,$/, "");
+                        if (newTag && !tags.includes(newTag)) {
+                          const newTags = [...tags, newTag];
+                          field.onChange(newTags);
+                        }
+                        setInputValue("");
+                      } else if (
+                        e.key === "Backspace" &&
+                        !inputValue &&
+                        tags.length > 0
+                      ) {
+                        const newTags = tags.slice(0, -1);
+                        field.onChange(newTags);
+                      }
+                    };
+
+                    const handleRemoveTag = (tagToRemove: string) => {
+                      const newTags = tags.filter(
+                        (tag: string) => tag !== tagToRemove
+                      );
+                      field.onChange(newTags);
+                    };
+
+                    return (
+                      <FormItem>
+                        <FormLabel>Benefits</FormLabel>
+                        <FormControl>
+                          <div>
+                            <div className="flex flex-wrap gap-2 mb-2">
+                              {tags.map((tag: string, idx: number) => (
+                                <span
+                                  key={idx}
+                                  className="flex items-center bg-muted px-2 py-1 rounded text-sm"
+                                >
+                                  {tag}
+                                  <button
+                                    type="button"
+                                    className="ml-1 text-muted-foreground hover:text-destructive"
+                                    onClick={() => handleRemoveTag(tag)}
+                                    tabIndex={-1}
+                                  >
+                                    <X className="w-3 h-3" />
+                                  </button>
+                                </span>
+                              ))}
+                            </div>
+                            <Input
+                              placeholder="Enter benefits and press comma"
+                              value={inputValue}
+                              onChange={handleInputChange}
+                              onKeyDown={handleInputKeyDown}
+                            />
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    );
+                  }}
+                />
+                <FormField
+                  control={form.control}
+                  name="applications"
+                  render={({ field }) => {
+                    const [inputValue, setInputValue] = useState("");
+                    const tags = field.value || [];
+
+                    const handleInputChange = (
+                      e: React.ChangeEvent<HTMLInputElement>
+                    ) => {
+                      setInputValue(e.target.value);
+                    };
+
+                    const handleInputKeyDown = (
+                      e: React.KeyboardEvent<HTMLInputElement>
+                    ) => {
+                      if (e.key === "," || e.key === "Enter") {
+                        e.preventDefault();
+                        const newTag = inputValue.trim().replace(/,$/, "");
+                        if (newTag && !tags.includes(newTag)) {
+                          const newTags = [...tags, newTag];
+                          field.onChange(newTags);
+                        }
+                        setInputValue("");
+                      } else if (
+                        e.key === "Backspace" &&
+                        !inputValue &&
+                        tags.length > 0
+                      ) {
+                        const newTags = tags.slice(0, -1);
+                        field.onChange(newTags);
+                      }
+                    };
+
+                    const handleRemoveTag = (tagToRemove: string) => {
+                      const newTags = tags.filter(
+                        (tag: string) => tag !== tagToRemove
+                      );
+                      field.onChange(newTags);
+                    };
+
+                    return (
+                      <FormItem>
+                        <FormLabel>Applications</FormLabel>
+                        <FormControl>
+                          <div>
+                            <div className="flex flex-wrap gap-2 mb-2">
+                              {tags.map((tag: string, idx: number) => (
+                                <span
+                                  key={idx}
+                                  className="flex items-center bg-muted px-2 py-1 rounded text-sm"
+                                >
+                                  {tag}
+                                  <button
+                                    type="button"
+                                    className="ml-1 text-muted-foreground hover:text-destructive"
+                                    onClick={() => handleRemoveTag(tag)}
+                                    tabIndex={-1}
+                                  >
+                                    <X className="w-3 h-3" />
+                                  </button>
+                                </span>
+                              ))}
+                            </div>
+                            <Input
+                              placeholder="Enter benefits and press comma"
+                              value={inputValue}
+                              onChange={handleInputChange}
+                              onKeyDown={handleInputKeyDown}
+                            />
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    );
+                  }}
+                />
+                <FormField
+                  control={form.control}
+                  name="installation"
+                  render={({ field }) => {
+                    const [inputValue, setInputValue] = useState("");
+                    const tags = field.value || [];
+
+                    const handleInputChange = (
+                      e: React.ChangeEvent<HTMLInputElement>
+                    ) => {
+                      setInputValue(e.target.value);
+                    };
+
+                    const handleInputKeyDown = (
+                      e: React.KeyboardEvent<HTMLInputElement>
+                    ) => {
+                      if (e.key === "," || e.key === "Enter") {
+                        e.preventDefault();
+                        const newTag = inputValue.trim().replace(/,$/, "");
+                        if (newTag && !tags.includes(newTag)) {
+                          const newTags = [...tags, newTag];
+                          field.onChange(newTags);
+                        }
+                        setInputValue("");
+                      } else if (
+                        e.key === "Backspace" &&
+                        !inputValue &&
+                        tags.length > 0
+                      ) {
+                        const newTags = tags.slice(0, -1);
+                        field.onChange(newTags);
+                      }
+                    };
+
+                    const handleRemoveTag = (tagToRemove: string) => {
+                      const newTags = tags.filter(
+                        (tag: string) => tag !== tagToRemove
+                      );
+                      field.onChange(newTags);
+                    };
+
+                    return (
+                      <FormItem>
+                        <FormLabel>Installation</FormLabel>
+                        <FormControl>
+                          <div>
+                            <div className="flex flex-wrap gap-2 mb-2">
+                              {tags.map((tag: string, idx: number) => (
+                                <span
+                                  key={idx}
+                                  className="flex items-center bg-muted px-2 py-1 rounded text-sm"
+                                >
+                                  {tag}
+                                  <button
+                                    type="button"
+                                    className="ml-1 text-muted-foreground hover:text-destructive"
+                                    onClick={() => handleRemoveTag(tag)}
+                                    tabIndex={-1}
+                                  >
+                                    <X className="w-3 h-3" />
+                                  </button>
+                                </span>
+                              ))}
+                            </div>
+                            <Input
+                              placeholder="Enter benefits and press comma"
                               value={inputValue}
                               onChange={handleInputChange}
                               onKeyDown={handleInputKeyDown}

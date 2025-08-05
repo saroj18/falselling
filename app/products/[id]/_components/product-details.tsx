@@ -67,12 +67,12 @@ const ProductDetail = ({ product }: { product: IProduct }) => {
                 <Badge className="absolute top-4 left-4 bg-red-500 hover:bg-red-600">
                   Popular
                 </Badge>
-              )}
-              {product.discount && (
-                <Badge className="absolute top-4 right-4 bg-green-500 hover:bg-green-600">
-                  {product.discount}
-                </Badge>
               )} */}
+              {product.discount && (
+                <Badge className="absolute top-4 right-4 bg-green-700 hover:bg-green-600">
+                  {product.discount}% off
+                </Badge>
+              )}
               <Image
                 width={700}
                 height={200}
@@ -203,21 +203,15 @@ const ProductDetail = ({ product }: { product: IProduct }) => {
                 <CardTitle>Technical Specifications</CardTitle>
               </CardHeader>
               <CardContent>
-                {/* <div className="grid md:grid-cols-2 gap-4">
-                  {Object.entries(product.specifications).map(
-                    ([key, value]) => (
-                      <div
-                        key={key}
-                        className="flex justify-between py-2 border-b border-gray-100 last:border-b-0"
-                      >
-                        <span className="font-medium text-gray-700">
-                          {key}:
-                        </span>
-                        <span className="text-gray-600">{value}</span>
-                      </div>
-                    )
-                  )}
-                </div> */}
+                <ul className="space-y-3">
+                  {product.specification &&
+                    product.specification.map((benefit, index) => (
+                      <li key={index} className="flex items-start space-x-3">
+                        <div className="h-2 w-2 bg-blue-600 rounded-full mt-2 flex-shrink-0" />
+                        <span className="text-gray-700">{benefit}</span>
+                      </li>
+                    ))}
+                </ul>
               </CardContent>
             </Card>
           </TabsContent>
@@ -228,14 +222,15 @@ const ProductDetail = ({ product }: { product: IProduct }) => {
                 <CardTitle>Product Benefits</CardTitle>
               </CardHeader>
               <CardContent>
-                {/* <ul className="space-y-3">
-                  {product.benefits.map((benefit, index) => (
-                    <li key={index} className="flex items-start space-x-3">
-                      <div className="h-2 w-2 bg-blue-600 rounded-full mt-2 flex-shrink-0" />
-                      <span className="text-gray-700">{benefit}</span>
-                    </li>
-                  ))}
-                </ul> */}
+                <ul className="space-y-3">
+                  {product.benefits &&
+                    product.benefits.map((benefit, index) => (
+                      <li key={index} className="flex items-start space-x-3">
+                        <div className="h-2 w-2 bg-blue-600 rounded-full mt-2 flex-shrink-0" />
+                        <span className="text-gray-700">{benefit}</span>
+                      </li>
+                    ))}
+                </ul>
               </CardContent>
             </Card>
           </TabsContent>
@@ -246,17 +241,15 @@ const ProductDetail = ({ product }: { product: IProduct }) => {
                 <CardTitle>Ideal Applications</CardTitle>
               </CardHeader>
               <CardContent>
-                {/* <div className="grid md:grid-cols-2 gap-4">
-                  {product.applications.map((application, index) => (
-                    <div
-                      key={index}
-                      className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg"
-                    >
-                      <div className="h-2 w-2 bg-green-600 rounded-full" />
-                      <span className="text-gray-700">{application}</span>
-                    </div>
-                  ))}
-                </div> */}
+                <ul className="space-y-3">
+                  {product.applications &&
+                    product.applications.map((benefit, index) => (
+                      <li key={index} className="flex items-start space-x-3">
+                        <div className="h-2 w-2 bg-blue-600 rounded-full mt-2 flex-shrink-0" />
+                        <span className="text-gray-700">{benefit}</span>
+                      </li>
+                    ))}
+                </ul>
               </CardContent>
             </Card>
           </TabsContent>

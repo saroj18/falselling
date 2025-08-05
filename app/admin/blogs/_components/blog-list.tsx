@@ -51,6 +51,7 @@ import Image from "next/image";
 import { addBlog, deleteBlog, updateBlog } from "@/actions/blog";
 import { toast } from "sonner";
 import { IBlog } from "@/types/blog";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const BlogContent = ({ blogs }: { blogs: IBlog[] }) => {
   const [selectedBlog, setSelectedBlog] = useState<any>(null);
@@ -75,7 +76,7 @@ const BlogContent = ({ blogs }: { blogs: IBlog[] }) => {
   ];
 
   const onSubmit = async (data: Blog | BlogUpdate) => {
-    console.log('data>>',data)
+    console.log("data>>", data);
     try {
       setLoading(true);
 
@@ -406,13 +407,17 @@ const BlogContent = ({ blogs }: { blogs: IBlog[] }) => {
                           return (
                             <div key={index} className="relative group">
                               <div className=" border-4 border-green-400 bg-muted rounded-lg flex items-center justify-center">
-                                <Image
-                                  width={200}
-                                  height={200}
-                                  alt="product images"
-                                  src={imageSrc as any}
-                                  className="rounded-lg"
-                                />
+                                {imageSrc ? (
+                                  <Image
+                                    width={200}
+                                    height={200}
+                                    alt="product images"
+                                    src={imageSrc as any}
+                                    className="rounded-lg"
+                                  />
+                                ) : (
+                                  <Skeleton className="h-[200px] w-[200px] rounded-lg" />
+                                )}
                               </div>
                             </div>
                           );
