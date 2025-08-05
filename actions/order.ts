@@ -81,3 +81,48 @@ export const changeStatus = async (id: string, status: StatusType) => {
     return { message: error.message, success: false, data: null };
   }
 };
+
+export const filterByStatus = async (
+  status: StatusType | "all"
+): Promise<Response<IOrder[]>> => {
+  try {
+    let order;
+    if (status == "all") {
+      order = (await prisma.order.findMany({
+        include: {
+          orderedProduct: true,
+          orderBy: true,
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      })) as IOrder[];
+      return {
+        message: "",
+        success: true,
+        data: order,
+      };
+    } else {
+      order = (await prisma.order.findMany({
+        include: {
+          orderedProduct: true,
+          orderBy: true,
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+        where: {
+          status,
+        },
+      })) as IOrder[];
+
+      return {
+        message: "",
+        success: true,
+        data: order,
+      };
+    }
+  } catch (error: any) {
+    return { message: error.message, success: false, data: null };
+  }
+};
