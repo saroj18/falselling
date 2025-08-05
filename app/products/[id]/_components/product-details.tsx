@@ -17,8 +17,11 @@ import {
 import Link from "next/link";
 import { IProduct } from "@/types/product";
 import Image from "next/image";
+import Quote from "./quota-calculator";
+import { useState } from "react";
 
 const ProductDetail = ({ product }: { product: IProduct }) => {
+  const [quota, setQuota] = useState(false);
   if (!product) {
     return (
       <div className="min-h-screen bg-gray-50">
@@ -68,8 +71,8 @@ const ProductDetail = ({ product }: { product: IProduct }) => {
                   Popular
                 </Badge>
               )} */}
-              {product.discount && (
-                <Badge className="absolute top-4 right-4 bg-green-700 hover:bg-green-600">
+              {product.discount > 0 && (
+                <Badge className="absolute top-4 right-4 bg-red-700 hover:bg-green-600">
                   {product.discount}% off
                 </Badge>
               )}
@@ -140,11 +143,13 @@ const ProductDetail = ({ product }: { product: IProduct }) => {
             <div className="bg-blue-50 p-6 rounded-lg">
               <div className="flex items-center space-x-3 mb-2">
                 <span className="text-2xl font-bold text-blue-600">
-                  {product.price}
+                  {product.price - (product.price * product.discount) / 100}
+                  /sq.ft
                 </span>
-                {product.price && (
+                {product.discount > 0 && (
                   <span className="text-lg text-gray-500 line-through">
-                    {product.price}
+                    {product.price + (product.price * product.discount) / 100}
+                    /sq.ft
                   </span>
                 )}
               </div>
@@ -153,7 +158,9 @@ const ProductDetail = ({ product }: { product: IProduct }) => {
               </p> */}
 
               <div className="grid grid-cols-2 gap-3">
-                <Button className="w-full">Get Quote</Button>
+                <Button onClick={() => setQuota(!quota)} className="w-full">
+                  Get Quota
+                </Button>
                 <Button variant="outline" className="w-full" asChild>
                   <a
                     href="https://wa.me/9779851187267"
@@ -187,7 +194,7 @@ const ProductDetail = ({ product }: { product: IProduct }) => {
             </div>
           </div>
         </div>
-
+        {quota && <Quote product={product} />}
         {/* Detailed Information Tabs */}
         <Tabs defaultValue="specifications" className="mb-12">
           <TabsList className="grid w-full grid-cols-4">
