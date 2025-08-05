@@ -18,22 +18,32 @@ import { Button } from "@/components/ui/button";
 import { Avatar } from "@/components/ui/avatar";
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 
 const Sidebar = () => {
-  const [activeTab, setActiveTab] = useState("dashboard");
-  const [mobile, setMobile] = useState(false); // You can adjust or remove this if not needed
+  const [mobile, setMobile] = useState(false);
+  const pathname = usePathname().split("/")[2];
+  console.log("pathname", pathname);
 
   const sidebarItems = [
     {
       id: "dashboard",
       label: "Dashboard",
       icon: LayoutDashboard,
+      path: undefined,
       href: "/admin",
     },
-    { id: "users", label: "Users", icon: Users, href: "/admin/user" },
+    {
+      id: "users",
+      label: "User",
+      path: "users",
+      icon: Users,
+      href: "/admin/users",
+    },
     {
       id: "products",
       label: "Products",
+      path: "product",
       icon: Package,
       href: "/admin/product",
     },
@@ -41,39 +51,38 @@ const Sidebar = () => {
       id: "orders",
       label: "Orders",
       icon: ShoppingCart,
+      path: "orders",
       href: "/admin/orders",
     },
     {
       id: "analytics",
+      path: "analytics",
       label: "Analytics",
       icon: BarChart3,
       href: "/admin/analytics",
     },
     {
       id: "notifications",
-      label: "Notifications",
+      path: "notifications",
+      label: "Notification",
       icon: Bell,
-      href: "/admin/notification",
+      href: "/admin/notifications",
     },
     {
       id: "blogs",
       label: "Blogs",
+      path: "blogs",
       icon: Book,
       href: "/admin/blogs",
     },
     {
       id: "settings",
-      label: "Settings",
+      label: "Setting",
+      path: "settings",
       icon: Settings,
-      href: "/admin/setting",
+      href: "/admin/settings",
     },
   ];
-
-  const handleTabClick = (itemId: string) => {
-    setActiveTab(itemId);
-    // If you want to handle mobile close, you can do it here
-    // setMobile(false);
-  };
 
   return (
     <div
@@ -101,11 +110,10 @@ const Sidebar = () => {
               href={item.href}
               key={item.id}
               className={`w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-left transition-colors ${
-                activeTab === item.id
+                pathname === item.path
                   ? "bg-primary text-white"
                   : "text-muted-foreground hover:bg-muted hover:text-foreground"
               }`}
-              onClick={() => handleTabClick(item.id)}
             >
               <Icon className="h-5 w-5" />
               <span>{item.label}</span>
