@@ -86,14 +86,14 @@ const ProductsContent = ({ products }: ProductsContentProps) => {
             <table className="w-full">
               <thead className="border-b border-border">
                 <tr>
-                  <th className="text-left p-4 font-medium">Product</th>
-                  <th className="text-left p-4 font-medium">Category</th>
-                  <th className="text-left p-4 font-medium">Price</th>
-                  <th className="text-left p-4 font-medium">Stock</th>
-                  <th className="text-left p-4 font-medium">Weight</th>
-                  <th className="text-left p-4 font-medium">Warranty</th>
-                  <th className="text-left p-4 font-medium">Status</th>
-                  <th className="text-left p-4 font-medium">Actions</th>
+                  <th className="text-center p-4 font-medium">Product</th>
+                  <th className="text-center p-4 font-medium">Category</th>
+                  <th className="text-center p-4 font-medium">Price</th>
+                  <th className="text-center p-4 font-medium">Stock</th>
+                  <th className="text-center p-4 font-medium">Weight</th>
+                  <th className="text-center p-4 font-medium">Warranty</th>
+                  <th className="text-center p-4 font-medium">Status</th>
+                  <th className="text-center p-4 font-medium">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -115,14 +115,14 @@ const ProductsContent = ({ products }: ProductsContentProps) => {
                         <span className="font-medium">{product.name}</span>
                       </div>
                     </td>
-                    <td className="p-4 text-muted-foreground">
-                      {product.category}
+                    <td className="p-4 text-center text-muted-foreground">
+                      {product.category?.name}
                     </td>
-                    <td className="p-4 font-medium">{product.price}</td>
-                    <td className="p-4">{product.stock}</td>
-                    <td className="p-4">{product.weight}</td>
-                    <td className="p-4">{product.warranty}</td>
-                    <td className="p-4">
+                    <td className="p-4 text-center font-medium">{product.price}</td>
+                    <td className="p-4 text-center">{product.stock}</td>
+                    <td className="p-4 text-center">{product.weight}</td>
+                    <td className="p-4 text-center">{product.warranty}</td>
+                    <td className="p-4 text-center">
                       <Badge
                         variant={
                           product.status === "in_stock"
@@ -135,8 +135,8 @@ const ProductsContent = ({ products }: ProductsContentProps) => {
                         {product.status}
                       </Badge>
                     </td>
-                    <td className="p-4">
-                      <div className="flex items-center space-x-2">
+                    <td className="p-4 text-center">
+                      <div className="flex items-center justify-center space-x-2">
                         <Button
                           variant="ghost"
                           size="sm"

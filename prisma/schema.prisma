@@ -33,7 +33,7 @@ model User {
 model Product {
   id          String   @id @default(uuid())
   name        String
-  category    String
+  category_id    String?
   price       Float
   discount    Int?
   stock       Int
@@ -51,6 +51,7 @@ model Product {
   benefits      String[] 
   applications      String[] 
   installation      String[] 
+  category     Category? @relation(fields: [category_id], references: [id])
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -89,9 +90,21 @@ model Order {
   updatedAt DateTime @updatedAt
 }
 
+
 enum OrderStatus {
  PENDING
  COMPLETED
  CANCEL
  RECEIVED
+}
+
+
+
+model Category {
+  id  String @id @default(cuid())
+  name String
+  description String?
+  products Product[]
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
 }

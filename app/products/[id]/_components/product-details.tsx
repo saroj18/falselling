@@ -20,7 +20,13 @@ import Image from "next/image";
 import Quote from "./quota-calculator";
 import { useState } from "react";
 
-const ProductDetail = ({ product,userId }: { product: IProduct,userId:string }) => {
+const ProductDetail = ({
+  product,
+  userId,
+}: {
+  product: IProduct;
+  userId: string;
+}) => {
   const [quota, setQuota] = useState(false);
   if (!product) {
     return (
@@ -99,7 +105,7 @@ const ProductDetail = ({ product,userId }: { product: IProduct,userId:string }) 
           <div className="space-y-6">
             <div>
               <Badge variant="secondary" className="mb-2">
-                {product.category}
+                {product.category?.name}
               </Badge>
               <h1 className="text-3xl font-bold mb-4">{product.name}</h1>
               <p className="text-gray-600 text-lg leading-relaxed">
@@ -116,12 +122,28 @@ const ProductDetail = ({ product,userId }: { product: IProduct,userId:string }) 
                   ({product.reviews} reviews)
                 </span> */}
               </div>
-              {product.stock && (
+              {product.status == "in_stock" && (
                 <Badge
                   variant="outline"
                   className="text-green-600 border-green-600"
                 >
                   In Stock
+                </Badge>
+              )}
+              {product.status == "out_of_stock" && (
+                <Badge
+                  variant="outline"
+                  className="text-red-600 border-red-600"
+                >
+                  Out of Stock
+                </Badge>
+              )}
+              {product.status == "low_stock" && (
+                <Badge
+                  variant="outline"
+                  className="text-orange-600 border-orange-600"
+                >
+                  Low Stock
                 </Badge>
               )}
             </div>
@@ -158,7 +180,13 @@ const ProductDetail = ({ product,userId }: { product: IProduct,userId:string }) 
               </p> */}
 
               <div className="grid grid-cols-2 gap-3">
-                <Button onClick={() => setQuota(!quota)} className="w-full">
+                <Button
+                  disabled={product.status == "out_of_stock"}
+                  onClick={() => setQuota(!quota)}
+                  className={`w-full ${
+                    product.status == "out_of_stock" ? "cursor-not-allowed" : ""
+                  }`}
+                >
                   Get Quota
                 </Button>
                 <Button variant="outline" className="w-full" asChild>

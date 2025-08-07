@@ -48,6 +48,13 @@ const Sidebar = () => {
       href: "/admin/product",
     },
     {
+      id: "category",
+      label: "Category",
+      path: "category",
+      icon: TrendingUp,
+      href: "/admin/category",
+    },
+    {
       id: "orders",
       label: "Orders",
       icon: ShoppingCart,

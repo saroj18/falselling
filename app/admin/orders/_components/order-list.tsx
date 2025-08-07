@@ -169,7 +169,8 @@ const OrdersContent = ({ orders }: { orders: IOrder[] }) => {
                         </Badge>
                       </td>
                       <td className="p-4 text-center">
-                        {new Date(order.createdAt).toLocaleDateString()}
+                        {new Date(order.createdAt).toLocaleDateString()}-
+                        {new Date(order.createdAt).toLocaleTimeString()}
                       </td>
                       <td className="p-4 text-center">
                         <div className="flex justify-center items-center space-x-2">

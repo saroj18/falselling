@@ -23,7 +23,11 @@ export async function addProduct(productInfo: ProductFormData) {
     const images = await uploader.upload(validateProduct.data.images);
     console.log(validateProduct.data);
     const product = await prisma.product.create({
-      data: { ...validateProduct.data, images },
+      data: {
+        ...validateProduct.data,
+        images,
+        category: { connect: { id: validateProduct.data.category } },
+      },
     });
     if (!product) {
       throw new Error("failed to create product on db");

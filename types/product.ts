@@ -1,7 +1,9 @@
 import { ProductFormData } from "@/zod-schema/product";
-
-export interface IProduct extends ProductFormData {
+import { ICategory } from "./category";
+export interface IProduct extends Omit<ProductFormData,"category"> {
   createdAt: Date;
   updatedAt: Date;
   id: string;
+  category?: ICategory; 
+
 }
