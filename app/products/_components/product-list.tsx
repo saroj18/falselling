@@ -39,7 +39,7 @@ const Products = ({ products }: { products: IProduct[] }) => {
       product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       product.description.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory =
-      selectedCategory === "all" || product.category === selectedCategory;
+      selectedCategory === "all" || product.category?.name === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 

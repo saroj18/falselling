@@ -1,5 +1,6 @@
 "use server";
 
+import { uploader } from "@/helper/FileUploader";
 import { ICategory } from "@/types/category";
 import { Response } from "@/types/response";
 import { prisma } from "@/utils/prisma";
@@ -8,7 +9,12 @@ import { revalidatePath } from "next/cache";
 
 export async function addCategory(CategoryInfo: CategoryFormData) {
   try {
+    if (CategoryInfo.images?.length < 1) {
+      throw new Error("images are required");
+    }
+
     const validCategory = categorySchema.safeParse(CategoryInfo);
+
     if (!validCategory.success) {
       return {
         message: validCategory.error.format(),
@@ -16,8 +22,9 @@ export async function addCategory(CategoryInfo: CategoryFormData) {
         data: null,
       };
     }
+    const images = await uploader.upload(validCategory.data.images);
     const category = await prisma.category.create({
-      data: { ...validCategory.data },
+      data: { ...validCategory.data, images },
     });
     if (!category) {
       throw new Error("failed to create category on db");
