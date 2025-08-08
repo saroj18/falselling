@@ -51,7 +51,7 @@ model Product {
   benefits      String[] 
   applications      String[] 
   installation      String[] 
-  category     Category? @relation(fields: [category_id], references: [id])
+  category     Category? @relation(fields: [category_id], references: [id],onDelete: Cascade,onUpdate: Cascade)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -82,7 +82,7 @@ model Order {
   user_id   String 
   orderBy   User   @relation(fields: [user_id], references: [id])
   product_id String
-  orderedProduct Product @relation(fields: [product_id], references: [id])
+  orderedProduct Product @relation(fields: [product_id], references: [id],onDelete: Cascade,onUpdate: Cascade)
   price     String
   discount  String
   status    OrderStatus @default(PENDING)

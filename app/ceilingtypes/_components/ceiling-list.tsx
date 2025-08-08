@@ -55,7 +55,7 @@ const CeilingTypes = ({ ceilingTypes }: { ceilingTypes: ICategory[] }) => {
                       width={400}
                       height={200}
                       alt="product images"
-                      src={ceiling.images[0]}
+                      src={ceiling.images[0]||'https://via.placeholder.com/300'}
                       className="rounded-lg mx-auto my-2"
                     />
                   </div>

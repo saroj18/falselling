@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Menu, X, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -16,10 +16,39 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
+import { ICategory } from "@/types/category";
+import { getAllCategory } from "@/actions/category";
+
+type CatType = {
+  name: string;
+  items: [{ name: string; href: string }];
+};
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
+  const [category, setCategory] = useState<CatType[]>([]);
+
+  useEffect(() => {
+    async function getCagegory() {
+      const { data } = await getAllCategory();
+      console.log("data", data);
+      const info = data?.map((cat) => {
+        return {
+          name: cat.name,
+          items: cat.products?.map((prod) => {
+            return {
+              name: prod.name,
+              href: `/products/${prod.id}`,
+            };
+          }),
+        };
+      });
+      console.log("info", info?.slice(0, 3));
+      setCategory(info?.reverse()?.slice(1, 4) as CatType[]);
+    }
+    getCagegory();
+  }, []);
 
   const productCategories = [
     {
@@ -56,7 +85,7 @@ const Header = () => {
     {
       name: "Products",
       href: "/products",
-      categories: productCategories,
+      categories: category,
     },
     { name: "Ceiling Types", href: "/ceilingtypes" },
     { name: "Services", href: "/services" },
@@ -101,7 +130,7 @@ const Header = () => {
                         </NavigationMenuTrigger>
                         <NavigationMenuContent>
                           <div className="grid w-[800px] gap-3 p-6 md:grid-cols-3">
-                            {item.categories.map((category) => (
+                            {item.categories?.map((category) => (
                               <div
                                 key={category.name}
                                 className="group relative"
@@ -110,7 +139,7 @@ const Header = () => {
                                   {category.name}
                                 </div>
                                 <div className="space-y-2">
-                                  {category.items.map((subItem) => (
+                                  {category.items?.map((subItem) => (
                                     <NavigationMenuLink
                                       key={subItem.name}
                                       asChild
@@ -219,7 +248,7 @@ const Header = () => {
                                 {category.name}
                               </div>
                               <div className="ml-2 space-y-1">
-                                {category.items.map((subItem) => (
+                                {category.items?.map((subItem) => (
                                   <Link
                                     key={subItem.name}
                                     href={subItem.href}
