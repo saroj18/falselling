@@ -89,7 +89,7 @@ const ProductDetailsDialog = ({
                     <label className="text-sm font-medium text-muted-foreground">
                       Category
                     </label>
-                    <p className="text-sm">{product.category}</p>
+                    <p className="text-sm">{product.category?.name}</p>
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
@@ -166,7 +166,7 @@ const ProductDetailsDialog = ({
                     Material
                   </span>
                   <span className="text-sm font-medium">
-                    {product.category}
+                    {product.category?.name}
                   </span>
                 </div>
                 <div className="flex justify-between">

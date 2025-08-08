@@ -38,6 +38,8 @@ import Image from "next/image";
 import { addProduct, updateProduct } from "@/actions/product";
 import { IProduct } from "@/types/product";
 import { toast } from "sonner";
+import { getAllCategory } from "@/actions/category";
+import { ICategory } from "@/types/category";
 
 interface ProductFormDialogProps {
   open: boolean;
@@ -48,7 +50,7 @@ interface ProductFormDialogProps {
 
 const defaultProductValues: ProductFormData = {
   name: "Test Product",
-  category: "Lighting",
+  category: [],
   price: 1000,
   stock: 112,
   status: "in_stock",
@@ -74,6 +76,7 @@ const ProductFormDialog = ({
   product,
 }: ProductFormDialogProps) => {
   const imageRef = useRef<HTMLInputElement | null>(null);
+  const [category, setCategory] = useState<ICategory[]>([]);
 
   const form = useForm<ProductFormData>({
     resolver: zodResolver(
@@ -81,16 +84,10 @@ const ProductFormDialog = ({
     ) as any,
   });
 
-  const categories = [
-    "Ceiling Tiles",
-    "Wall Panels",
-    "Lighting",
-    "Accessories",
-  ];
 
   const onSubmit = async (data: ProductFormData) => {
-    console.log("data>>>>", data);
     if (mode == "add") {
+      console.log("pro", data);
       const response = await addProduct(data);
       if (response.success) {
         toast.success("Product added successfully");
@@ -106,12 +103,33 @@ const ProductFormDialog = ({
   };
 
   useEffect(() => {
-    if (product && mode != "add") {
-      form.reset(product);
+    const getCategory = async () => {
+      const cat = await getAllCategory();
+      if (cat.success) {
+        setCategory(cat.data as ICategory[]);
+        const info = cat.data?.map((item) => {
+          return { name: item.name, id: item.id };
+        });
+        form.setValue("category", info as { name: string; id: string }[]);
+      }
+    };
+    getCategory();
+  }, []);
+
+  useEffect(() => {
+    if (product && mode !== "add") {
+      form.reset({
+        ...product,
+        category: product.category
+          ? Array.isArray(product.category)
+            ? product.category
+            : [{ id: product.category.id, name: product.category.name }]
+          : [],
+      });
     } else {
       form.reset(defaultProductValues);
     }
-  }, [form, product, open]);
+  }, [form, product, mode, open]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -152,8 +170,17 @@ const ProductFormDialog = ({
                       <FormItem>
                         <FormLabel>Category</FormLabel>
                         <Select
-                          onValueChange={field.onChange}
-                          value={field.value}
+                          onValueChange={(id) => {
+                            const selectedCat = category.find(
+                              (cat) => cat.id === id
+                            );
+                            if (selectedCat) {
+                              field.onChange([
+                                { id: selectedCat.id, name: selectedCat.name },
+                              ]);
+                            }
+                          }}
+                          value={field.value?.[0]?.id ?? ""}
                         >
                           <FormControl className="w-full">
                             <SelectTrigger>
@@ -161,9 +188,9 @@ const ProductFormDialog = ({
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            {categories.map((cat) => (
-                              <SelectItem key={cat} value={cat}>
-                                {cat}
+                            {category.map((cat) => (
+                              <SelectItem key={cat.id} value={cat.id}>
+                                {cat.name}
                               </SelectItem>
                             ))}
                           </SelectContent>

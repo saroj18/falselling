@@ -2,7 +2,13 @@ import { z } from "zod";
 
 export const productSchema = z.object({
   name: z.string().min(1, "Product name is required"),
-  category: z.string().min(1, "Category is required"),
+
+  category: z.array(
+    z.object({
+      name: z.string(),
+      id: z.string(),
+    })
+  ),
   price: z.coerce
     .number()
     .min(1, "Price must be greater than 1")
