@@ -14,17 +14,8 @@ import Image from "next/image";
 import Link from "next/link";
 
 const Blog = ({ blogPosts }: { blogPosts: IBlog[] }) => {
-  const categories = [
-    "All",
-    "Trends",
-    "Installation",
-    "Design Ideas",
-    "Maintenance",
-    "DIY Tips",
-    "Budget Tips",
-  ];
+
   const featuredPost = blogPosts.find((post) => post.featured);
-  const regularPosts = blogPosts.filter((post) => !post.featured);
   console.log("bog", blogPosts);
 
   return (
@@ -115,18 +106,7 @@ const Blog = ({ blogPosts }: { blogPosts: IBlog[] }) => {
       {/* Blog Posts Grid */}
       <section className="py-12">
         <div className="container mx-auto px-4">
-          <div className="flex flex-wrap gap-2 mb-8 justify-center">
-            {categories.map((category) => (
-              <Button
-                key={category}
-                variant="outline"
-                size="sm"
-                className="hover:bg-blue-50"
-              >
-                {category}
-              </Button>
-            ))}
-          </div>
+         <h1 className="text-center font-bold text-3xl my-4">Blog Posts</h1>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {blogPosts.map((post) => (

@@ -1,3 +1,5 @@
+"use client";
+
 import {
   ArrowLeft,
   Calendar,
@@ -11,24 +13,24 @@ import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import Link from "next/link";
 import { IBlog } from "@/types/blog";
+import { useEffect, useState } from "react";
+import { getAllBlogs } from "@/actions/blog";
 
 const BlogPost = ({ blogPost }: { blogPost: IBlog }) => {
-  const relatedPosts = [
-    {
-      id: "2",
-      title: "Acoustic Solutions for Modern Offices",
-      image: "/lovable-uploads/76a9e0e6-f29d-4304-bc9d-2f050ff8ad55.png",
-      category: "Solutions",
-      readTime: "5 min read",
-    },
-    {
-      id: "3",
-      title: "Maintenance Best Practices for Suspended Ceilings",
-      image: "/lovable-uploads/76a9e0e6-f29d-4304-bc9d-2f050ff8ad55.png",
-      category: "Maintenance",
-      readTime: "6 min read",
-    },
-  ];
+  const [relatedPosts, setRelatedPosts] = useState<IBlog[]>([]);
+
+  useEffect(() => {
+    async function getRelatedPosts() {
+      const info = await getAllBlogs();
+      if (info.success) {
+        const post = (info.data as IBlog[])
+          .filter((blog) => blog.category == blogPost.category)
+          .slice(0, 4);
+        setRelatedPosts(post);
+      }
+    }
+    getRelatedPosts();
+  }, []);
 
   return (
     <div className="min-h-screen bg-background">
@@ -125,7 +127,7 @@ const BlogPost = ({ blogPost }: { blogPost: IBlog }) => {
               >
                 <Link href={`/blog/${post.id}`}>
                   <img
-                    src={post.image}
+                    src={post.images}
                     alt={post.title}
                     className="w-full h-48 object-cover"
                   />
@@ -138,7 +140,7 @@ const BlogPost = ({ blogPost }: { blogPost: IBlog }) => {
                     </h3>
                     <div className="flex items-center gap-2 text-sm text-muted-foreground">
                       <Clock className="w-3 h-3" />
-                      <span>{post.readTime}</span>
+                      <span>5 min</span>
                     </div>
                   </div>
                 </Link>
