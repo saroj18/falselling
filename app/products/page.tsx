@@ -3,11 +3,11 @@ import Products from "./_components/product-list";
 import { IProduct } from "@/types/product";
 
 interface PageProps {
-  searchParams: Record<string, string | string[] | undefined>;
+  searchParams: Promise<{ category: string }>;
 }
 
 export default async function page({ searchParams }: PageProps) {
-  const category = searchParams.category;
+  const category = (await searchParams).category;
   let data;
   if (category) {
     data = await filterProductByCategory(category as string);

@@ -94,7 +94,7 @@ const CeilingTypes = ({ ceilingTypes }: { ceilingTypes: ICategory[] }) => {
                         </h4>
                         <div className="flex flex-wrap gap-1">
                           {ceiling.tags &&
-                            ceiling.tags.map((app, index) => (
+                            ceiling.tags.slice(0,5).map((app, index) => (
                               <Badge
                                 key={index}
                                 variant="outline"
@@ -119,10 +119,7 @@ const CeilingTypes = ({ ceilingTypes }: { ceilingTypes: ICategory[] }) => {
                           (this is not a acurate price)
                         </p>
                       </div>
-                      <Button className="group" size="sm">
-                        Get Quote
-                        <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                      </Button>
+                     
                     </div>
                   </CardContent>
                 </Card>
