@@ -13,6 +13,7 @@ import {
   BarChart3,
   Bell,
   Book,
+  ImageDownIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar } from "@/components/ui/avatar";
@@ -81,6 +82,13 @@ const Sidebar = () => {
       path: "blogs",
       icon: Book,
       href: "/admin/blogs",
+    },
+    {
+      id: "gallery",
+      label: "Gallery",
+      path: "gallery",
+      icon: ImageDownIcon,
+      href: "/admin/gallery",
     },
     {
       id: "settings",
