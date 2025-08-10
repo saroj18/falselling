@@ -39,6 +39,10 @@ export const authOptions: NextAuthOptions = {
           throw new ApiError("Incorrect password");
         }
 
+        if (checkUser.status == "Blocked") {
+          throw new ApiError("Your are Blocked by admin");
+        }
+
         return checkUser;
       },
     }),
@@ -49,6 +53,7 @@ export const authOptions: NextAuthOptions = {
         token.userId = user.id;
         token.email = user.email;
         token.name = (user as any).firstname + " " + (user as any).lastname;
+        token.role = (user as any).role;
       }
       return token;
     },
@@ -56,6 +61,7 @@ export const authOptions: NextAuthOptions = {
       session.user!.email = token.email as string;
       session.user!.name = token.name as string;
       (session.user as any).id = token.userId as string;
+      (session.user as any).role = token.role as string;
       return session;
     },
   },

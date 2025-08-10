@@ -1,0 +1,92 @@
+"use server";
+
+import { Response } from "@/types/response";
+import { IUser } from "@/types/user";
+import { prisma } from "@/utils/prisma";
+import { revalidatePath } from "next/cache";
+import { getServerSession } from "next-auth";
+
+const userInfo = await getServerSession();
+
+export const getAllUsers = async (): Promise<Response<IUser[]>> => {
+  try {
+    const users = (await prisma.user.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+    })) as IUser[];
+    console.log("ser>", users);
+    return {
+      message: "",
+      success: true,
+      data: users,
+    };
+  } catch (error: any) {
+    return {
+      message: error.message || "internal server error",
+      success: false,
+      data: null,
+    };
+  }
+};
+
+export const blockUser = async (id: string): Promise<Response<null>> => {
+  try {
+    console.log("cal");
+    if ((userInfo?.user as any).role != "Admin") {
+      return {
+        message: "You are not authorized for this task",
+        success: false,
+        data: null,
+      };
+    }
+    const users = await prisma.user.update({
+      where: { id },
+      data: {
+        status: "Blocked",
+      },
+    });
+    revalidatePath("/admin/users");
+    return {
+      message: "",
+      success: true,
+      data: null,
+    };
+  } catch (error: any) {
+    return {
+      message: error.message || "internal server error",
+      success: false,
+      data: null,
+    };
+  }
+};
+export const unBlockUser = async (id: string): Promise<Response<IUser[]>> => {
+  try {
+    if ((userInfo?.user as any).role != "Admin") {
+      return {
+        message: "You are not authorized for this task",
+        success: false,
+        data: null,
+      };
+    }
+
+    const users = await prisma.user.update({
+      where: { id },
+      data: {
+        status: "Active",
+      },
+    });
+    revalidatePath("/admin/users");
+    return {
+      message: "",
+      success: true,
+      data: null,
+    };
+  } catch (error: any) {
+    return {
+      message: error.message || "internal server error",
+      success: false,
+      data: null,
+    };
+  }
+};

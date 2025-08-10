@@ -18,15 +18,28 @@ enum STATUS {
   low_stock
   out_of_stock
 }
+enum USER_STATUS {
+  Active
+  Blocked
+}
+
+enum ROLE {
+  Admin
+  User
+}
 
 model User {
   id         String      @id @default(uuid())
   email      String      @unique
   firstname  String
   lastname   String
+  role        ROLE    @default(User)
   password   String
+  status      USER_STATUS @default(Active)
   phone      String         @unique
   order       Order[]
+  createdAt   DateTime? @default(now())
+  updatedAt   DateTime? @updatedAt
 
 }
 

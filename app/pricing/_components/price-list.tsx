@@ -210,19 +210,19 @@ const Pricing = ({ materialPricing }: { materialPricing: IProduct[] }) => {
                     <TableRow>
                       <TableHead>Material Type</TableHead>
                       <TableHead>Material Cost (per sq ft)</TableHead>
-                      <TableHead>Installation Cost (per sq ft)</TableHead>
+                      {/* <TableHead>Installation Cost (per sq ft)</TableHead> */}
                       <TableHead>Total Cost (per sq ft)</TableHead>
                       <TableHead>Features</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {materialPricing.map((item, index) => (
+                    {materialPricing.slice(0,9).map((item, index) => (
                       <TableRow key={index}>
                         <TableCell className="font-semibold">
                           {item.name}
                         </TableCell>
                         <TableCell>Rs. {item.price}</TableCell>
-                        <TableCell>Rs. {item.installation}</TableCell>
+                        {/* <TableCell>Rs. {item.installation}</TableCell> */}
                         <TableCell className="font-bold text-blue-600">
                           Rs. {item.price + 125}
                         </TableCell>
