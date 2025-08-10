@@ -5,8 +5,7 @@ import { IUser } from "@/types/user";
 import { prisma } from "@/utils/prisma";
 import { revalidatePath } from "next/cache";
 import { getServerSession } from "next-auth";
-
-const userInfo = await getServerSession();
+import { authOptions } from "@/utils/authOptions";
 
 export const getAllUsers = async (): Promise<Response<IUser[]>> => {
   try {
@@ -32,7 +31,7 @@ export const getAllUsers = async (): Promise<Response<IUser[]>> => {
 
 export const blockUser = async (id: string): Promise<Response<null>> => {
   try {
-    console.log("cal");
+    const userInfo = await getServerSession(authOptions);
     if ((userInfo?.user as any).role != "Admin") {
       return {
         message: "You are not authorized for this task",
@@ -62,6 +61,7 @@ export const blockUser = async (id: string): Promise<Response<null>> => {
 };
 export const unBlockUser = async (id: string): Promise<Response<IUser[]>> => {
   try {
+    const userInfo = await getServerSession(authOptions);
     if ((userInfo?.user as any).role != "Admin") {
       return {
         message: "You are not authorized for this task",
@@ -93,6 +93,7 @@ export const unBlockUser = async (id: string): Promise<Response<IUser[]>> => {
 
 export const deleteUser = async (id: string): Promise<Response<IUser[]>> => {
   try {
+    const userInfo = await getServerSession(authOptions);
     if ((userInfo?.user as any).role != "Admin") {
       return {
         message: "You are not authorized for this task",

@@ -4,6 +4,5 @@ import { IUser } from "@/types/user";
 
 export default async function page() {
   const { data } = await getAllUsers();
-  console.log("user", data);
   return <UsersContent recentUsers={data as IUser[]} />;
 }
