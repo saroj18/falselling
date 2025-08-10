@@ -176,46 +176,8 @@ const Footer = () => {
 
         {/* Bottom Footer */}
         <div className="flex flex-col lg:flex-row justify-between items-center space-y-4 lg:space-y-0">
-          <div className="text-sm text-secondary-foreground/60 text-center lg:text-left">
+          <div className="text-sm w-full mx-auto text-secondary-foreground/60 text-center lg:text-left">
             © 2024 FalseCeilingNepal.shop. All rights reserved.
-          </div>
-          <div className="flex flex-wrap justify-center lg:justify-end gap-6 text-sm text-secondary-foreground/60">
-            <Link
-              href="/privacy"
-              className="hover:text-primary transition-colors"
-            >
-              Privacy Policy
-            </Link>
-            <Link
-              href="/terms"
-              className="hover:text-primary transition-colors"
-            >
-              Terms & Conditions
-            </Link>
-            <Link
-              href="/refund"
-              className="hover:text-primary transition-colors"
-            >
-              Refund Policy
-            </Link>
-          </div>
-        </div>
-
-        {/* Trust Indicators */}
-        <div className="mt-8 pt-8 border-t border-secondary-foreground/20">
-          <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-8 text-sm text-secondary-foreground/60">
-            <div className="flex items-center space-x-2">
-              <div className="h-2 w-2 bg-primary rounded-full"></div>
-              <span>Verified by NepalBuild.com</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <div className="h-2 w-2 bg-primary rounded-full"></div>
-              <span>500+ Projects Completed</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <div className="h-2 w-2 bg-primary rounded-full"></div>
-              <span>5★ Customer Rating</span>
-            </div>
           </div>
         </div>
       </div>

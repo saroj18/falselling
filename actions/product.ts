@@ -137,3 +137,30 @@ export const deleteProduct = async (id: string) => {
 };
 
 
+export const filterProductByCategory = async (
+  category: string
+): Promise<Response<IProduct[]>> => {
+  try {
+    const products = (await prisma.product.findMany({
+      where: {
+      category: {
+        name: category,
+      },
+      },
+      include: {
+      category: true,
+      },
+    })) as IProduct[];
+    return {
+      message: "",
+      success: true,
+      data: products,
+    };
+  } catch (error: any) {
+    return {
+      message: error.message || "internal server error",
+      success: false,
+      data: null,
+    };
+  }
+};
