@@ -55,17 +55,8 @@ const Portfolio = ({ projects }: { projects: IGallery[] }) => {
     },
   ];
 
-  const categories = [
-    "All",
-    "Commercial",
-    "Residential",
-    "Hospitality",
-    "Healthcare",
-    "Retail",
-  ];
-
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen w-full">
       {/* Hero Section */}
       <section className="py-16 bg-gradient-to-r from-blue-50 to-purple-50">
         <div className="container mx-auto px-4 text-center">
@@ -83,54 +74,46 @@ const Portfolio = ({ projects }: { projects: IGallery[] }) => {
       {/* Projects Section */}
       <section className="py-16">
         <div className="container mx-auto px-4">
-          <Tabs defaultValue="All" className="w-full">
-            {categories.map((category) => (
-              <TabsContent key={category} value={category}>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                  {projects.map((project) => (
-                    <Card
-                      key={project.id}
-                      onClick={() => {
-                        setSelectedProject(project);
-                        setOpen(true);
-                      }}
-                      className="group hover:shadow-lg transition-all duration-300 cursor-pointer"
-                    >
-                      <div className="relative overflow-hidden rounded-t-lg">
-                        <Image
-                          src={project.images[0]}
-                          alt={project?.title || "image placeholder"}
-                          width={150}
-                          height={150}
-                          className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
-                        />
-                      </div>
-                      <CardHeader>
-                        <CardTitle className="text-lg">
-                          {project.title}
-                        </CardTitle>
-                        <CardDescription className="flex items-center gap-4 text-sm">
-                          <span className="flex items-center gap-1">
-                            <MapPin className="h-3 w-3" />
-                            {project.location}
-                          </span>
-                          <span className="flex items-center gap-1">
-                            <Calendar className="h-3 w-3" />
-                            {new Date(project.createdAt).toLocaleDateString()}
-                          </span>
-                        </CardDescription>
-                      </CardHeader>
-                      <CardContent>
-                        {/* <p className="text-gray-600 text-sm mb-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 ">
+            {projects.map((project) => (
+              <Card
+                key={project.id}
+                onClick={() => {
+                  setSelectedProject(project);
+                  setOpen(true);
+                }}
+                className="group hover:shadow-lg transition-all duration-300 cursor-pointer"
+              >
+                <div className="relative overflow-hidden rounded-t-lg">
+                  <Image
+                    src={project.images[0]}
+                    alt={project?.title || "image placeholder"}
+                    width={150}
+                    height={150}
+                    className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                </div>
+                <CardHeader>
+                  <CardTitle className="text-lg">{project.title}</CardTitle>
+                  <CardDescription className="flex items-center gap-4 text-sm">
+                    <span className="flex items-center gap-1">
+                      <MapPin className="h-3 w-3" />
+                      {project.location}
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <Calendar className="h-3 w-3" />
+                      {new Date(project.createdAt).toLocaleDateString()}
+                    </span>
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {/* <p className="text-gray-600 text-sm mb-4">
                           {project.description}
                         </p> */}
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              </TabsContent>
+                </CardContent>
+              </Card>
             ))}
-          </Tabs>
+          </div>
         </div>
       </section>
 
@@ -201,7 +184,7 @@ const Portfolio = ({ projects }: { projects: IGallery[] }) => {
 
       {/* Project Images Dialog */}
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-!8xl w-full">
+        <DialogContent className="max-w-xl max-h-[90vh] overflow-y-auto">
           {selectedProject && (
             <>
               <DialogHeader>
