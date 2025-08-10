@@ -19,18 +19,9 @@ import { IGallery } from "@/types/gallery";
 interface Props {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onCreate: (items: IGallery[]) => void;
 }
 
-const toBase64 = (file: File) =>
-  new Promise<string>((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(String(reader.result));
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
-
-const GalleryFormDialog = ({ open, onOpenChange, onCreate }: Props) => {
+const GalleryFormDialog = ({ open, onOpenChange }: Props) => {
   const [files, setFiles] = useState<File[]>([]);
   const [description, setDescription] = useState("");
   const [title, setTitle] = useState("");

@@ -27,11 +27,8 @@ const GalleryContent = ({ images }: { images: IGallery[] }) => {
   const [loading, setLoading] = useState(false);
 
   // Edit item
-  const handleSaveEdit = async (updatedItem: IGallery) => {};
 
-  const handleCreateItems = async (data: any) => {
-    console.log(data);
-  };
+ 
 
   const removeItem = async (id: string) => {
     const response = await deleteGallery(id);
@@ -77,11 +74,7 @@ const GalleryContent = ({ images }: { images: IGallery[] }) => {
               </div>
 
               <CardContent className="py-0 space-y-2">
-                {item.description && (
-                  <p className="text-xs text-muted-foreground line-clamp-2">
-                    {item.description}
-                  </p>
-                )}
+               
                 {item.location && (
                   <p className="text-xs">
                     <span className="text-muted-foreground">Location:</span>{" "}
@@ -143,13 +136,11 @@ const GalleryContent = ({ images }: { images: IGallery[] }) => {
       <GalleryEditDialog
         item={editingItem}
         onClose={() => setEditingItem(null)}
-        onSave={handleSaveEdit}
       />
 
       <GalleryFormDialog
         open={createOpen}
         onOpenChange={setCreateOpen}
-        onCreate={handleCreateItems}
       />
     </div>
   );

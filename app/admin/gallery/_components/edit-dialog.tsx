@@ -19,23 +19,13 @@ import { toast } from "sonner";
 interface Props {
   item: IGallery | null;
   onClose: () => void;
-  onSave: (item: IGallery) => void;
 }
 
-const toBase64 = (file: File) =>
-  new Promise<string>((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(String(reader.result));
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
-
-const GalleryEditDialog = ({ item, onClose, onSave }: Props) => {
+const GalleryEditDialog = ({ item, onClose }: Props) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [tagsInput, setTagsInput] = useState("");
   const [location, setLocation] = useState("");
-  const [url, setUrl] = useState<string | undefined>(undefined);
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
@@ -44,7 +34,6 @@ const GalleryEditDialog = ({ item, onClose, onSave }: Props) => {
       setDescription(item.description || "");
       setTagsInput((item.tags || []).join(", "));
       setLocation(item.location || "");
-      // setUrl(item.url);
     }
   }, [item]);
 
@@ -68,6 +57,7 @@ const GalleryEditDialog = ({ item, onClose, onSave }: Props) => {
       }
     } finally {
       setSaving(false);
+      onClose();
     }
   };
 

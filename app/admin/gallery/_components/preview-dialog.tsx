@@ -18,34 +18,48 @@ interface Props {
 const GalleryPreviewDialog = ({ item, onClose }: Props) => {
   return (
     <Dialog open={!!item} onOpenChange={(o) => !o && onClose()}>
-      <DialogContent className="max-w-3xl">
-        <DialogHeader>
-          <DialogTitle>{item?.title}</DialogTitle>
-          <DialogDescription>{item?.description}</DialogDescription>
+      <DialogContent className="max-w-4xl">
+        <DialogHeader className="space-y-2">
+          <DialogTitle className="text-2xl font-bold tracking-tight">
+            {item?.title}
+          </DialogTitle>
+          {/* <DialogDescription className="text-base text-gray-600">
+            {item?.description}
+          </DialogDescription> */}
         </DialogHeader>
-        <div className="grid grid-cols-3 gap-2 justify-center items-center w-full">
-          {item &&
-            item.images.map((image) => (
+
+        {/* Image Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 mt-4">
+          {item?.images.map((image) => (
+            <div
+              key={image}
+              className="relative w-full aspect-[4/3] overflow-hidden rounded-lg shadow-md group"
+            >
               <Image
-                key={image}
-                alt="product image"
+                alt="Project image"
                 src={image}
-                width={100}
-                height={100}
-                className="border-2 border-gray-500"
+                fill
+                className="object-cover transition-transform duration-300 group-hover:scale-105"
               />
-            ))}
+            </div>
+          ))}
         </div>
+
+        {/* Project Info */}
         {item && (
-          <div className="text-sm text-muted-foreground space-y-1">
+          <div className="mt-6 p-4 bg-gray-50 rounded-lg border space-y-1">
             {item.location && (
-              <p>
-                <strong>Location:</strong> {item.location}
+              <p className="text-sm">
+                <span className="font-semibold text-gray-800">
+                  📍 Location:
+                </span>{" "}
+                {item.location}
               </p>
             )}
             {item.tags?.length ? (
-              <p>
-                <strong>Tags:</strong> {item.tags.join(", ")}
+              <p className="text-sm">
+                <span className="font-semibold text-gray-800">🏷 Tags:</span>{" "}
+                {item.tags.join(", ")}
               </p>
             ) : null}
           </div>
