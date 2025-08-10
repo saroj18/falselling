@@ -10,6 +10,7 @@ import {
   Trash2,
   Ban,
   CheckCircle,
+  Trash,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -18,16 +19,27 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar } from "@/components/ui/avatar";
 import UserDetailsDialog from "../../_components/UserDetailsDialogBox";
 import { IUser } from "@/types/user";
-import { blockUser, unBlockUser } from "@/actions/user";
+import { blockUser, deleteUser, unBlockUser } from "@/actions/user";
 import { toast } from "sonner";
+import SignupDialog from "./user-add-form";
 
 const UsersContent = ({ recentUsers }: { recentUsers: IUser[] }) => {
   const [selectedUser, setSelectedUser] = useState<IUser | null>(null);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+  const [addUser, setAddUser] = useState(false);
 
   const handleViewUser = (user: IUser) => {
     setSelectedUser(user);
     setIsDetailsOpen(true);
+  };
+
+  const handleDelete = async (id: string) => {
+    const response = await deleteUser(id);
+    if (response.success) {
+      toast.success("User deleted Successfully");
+    } else {
+      toast.error(response.message);
+    }
   };
 
   const handleBlockUser = async (userId: string, status: string) => {
@@ -36,11 +48,15 @@ const UsersContent = ({ recentUsers }: { recentUsers: IUser[] }) => {
       const response = await blockUser(userId);
       if (response.success) {
         toast.success("User is Blocked");
+      } else {
+        toast.error(response.message);
       }
     } else if (status == "Blocked") {
       const response = await unBlockUser(userId);
       if (response.success) {
         toast.success("User is Unblocked");
+      } else {
+        toast.error(response.message);
       }
     }
   };
@@ -49,7 +65,7 @@ const UsersContent = ({ recentUsers }: { recentUsers: IUser[] }) => {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <h2 className="text-2xl font-bold">Users Management</h2>
-        <Button>
+        <Button onClick={() => setAddUser(true)}>
           <Plus className="h-4 w-4 mr-2" />
           Add User
         </Button>
@@ -115,7 +131,7 @@ const UsersContent = ({ recentUsers }: { recentUsers: IUser[] }) => {
                       </Badge>
                     </td>
                     <td className="p-4 text-muted-foreground">
-                      {new Date(user?.createAt as Date).toLocaleDateString()}
+                      {new Date(user?.createdAt as Date).toLocaleDateString()}
                     </td>
                     <td className="p-4">
                       <div className="flex items-center space-x-2">
@@ -142,6 +158,13 @@ const UsersContent = ({ recentUsers }: { recentUsers: IUser[] }) => {
                             )}
                           </Button>
                         )}
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleDelete(user.id)}
+                        >
+                          <Trash className="h-4 w-4" />
+                        </Button>
                       </div>
                     </td>
                   </tr>
@@ -157,6 +180,7 @@ const UsersContent = ({ recentUsers }: { recentUsers: IUser[] }) => {
         onOpenChange={setIsDetailsOpen}
         user={selectedUser as IUser}
       />
+      <SignupDialog open={addUser} setAddUser={setAddUser} />
     </div>
   );
 };

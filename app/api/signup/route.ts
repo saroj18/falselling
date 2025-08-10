@@ -43,6 +43,7 @@ export const POST = asyncHandler(async (req, context?: any) => {
       firstname: validateInfo.firstname,
       lastname: validateInfo.lastname,
       phone: validateInfo.phone,
+      role: validateInfo.role,
     },
   });
 

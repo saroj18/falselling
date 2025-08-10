@@ -149,7 +149,7 @@ const UserDetailsDialog = ({
                       <Calendar className="h-4 w-4 text-muted-foreground" />
                       <span>
                         Joined{" "}
-                        {new Date(user?.createAt as Date).toLocaleDateString()}
+                        {new Date(user?.createdAt as Date).toLocaleDateString()}
                       </span>
                     </div>
                   </div>

@@ -7,6 +7,6 @@ export type IUser = {
   role: "Admin" | "User";
   email: string;
   status: "Active" | "Blocked";
-  createAt?: Date;
+  createdAt?: Date;
   updatedAt?: Date;
 };

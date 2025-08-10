@@ -1,5 +1,10 @@
 import { z } from "zod";
 
+export enum UserRole {
+  Admin = "Admin",
+  User = "User",
+}
+
 export const userZodSchema = z
   .object({
     email: z.string().email({ message: "Invalid email address" }),
@@ -9,7 +14,12 @@ export const userZodSchema = z
     firstname: z
       .string()
       .min(1, { message: "First name must be at least 1 characters" }),
-
+    role: z
+      .enum([UserRole.Admin, UserRole.User], {
+        message: "Role must be Admin or User",
+      })
+      .default(UserRole.Admin)
+      .optional(),
     phone: z
       .string()
       .min(10, { message: "phone must be 10 characters" })

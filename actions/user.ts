@@ -90,3 +90,38 @@ export const unBlockUser = async (id: string): Promise<Response<IUser[]>> => {
     };
   }
 };
+
+export const deleteUser = async (id: string): Promise<Response<IUser[]>> => {
+  try {
+    if ((userInfo?.user as any).role != "Admin") {
+      return {
+        message: "You are not authorized for this task",
+        success: false,
+        data: null,
+      };
+    }
+
+    const findUser = await prisma.user.findUnique({ where: { id } });
+    if (findUser?.id == id) {
+      return {
+        message: "You are not authorized for this task",
+        success: false,
+        data: null,
+      };
+    }
+
+    await prisma.user.delete({ where: { id } });
+    revalidatePath("/admin/users");
+    return {
+      message: "",
+      success: true,
+      data: null,
+    };
+  } catch (error: any) {
+    return {
+      message: error.message || "internal server error",
+      success: false,
+      data: null,
+    };
+  }
+};
