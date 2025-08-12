@@ -136,3 +136,23 @@ model Gallery {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+
+
+model Contact {
+  id         String      @id @default(uuid())
+  name      String
+  phone         String
+  email         String
+  service     String
+  status      MESSAGE_STATUS @default(Unread)
+  message       String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+}
+
+enum MESSAGE_STATUS {
+  Read
+  Unread
+}

@@ -1,6 +1,8 @@
-"use client"
+"use client";
 
-import { useState } from "react";
+import { useForm, Controller } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Card,
   CardContent,
@@ -29,80 +31,95 @@ import {
   CheckCircle,
 } from "lucide-react";
 import { toast } from "sonner";
+import { ContactFormInputs, contactFormSchema } from "@/zod-schema/contact";
+import { sendContact } from "../../actions/contact";
+import { useState } from "react";
+
+const serviceOptions = [
+  "False Ceiling Design & Installation",
+  "POP Ceiling Design",
+  "Gypsum Ceiling Services",
+  "Acoustic Ceiling Solutions",
+  "Waterproof & Fireproof Ceilings",
+  "Site Visit & Consultation",
+  "Custom Ceiling Projects",
+  "Repair & Maintenance",
+];
+
+const contactInfo = [
+  {
+    icon: Phone,
+    title: "Phone",
+    content: "9851187267",
+    action: "tel:9851187267",
+    available: "Available 7 days a week",
+  },
+  {
+    icon: MessageCircle,
+    title: "WhatsApp",
+    content: "9851187267",
+    action: "https://wa.me/9779851187267",
+    available: "Quick response guaranteed",
+  },
+  {
+    icon: Mail,
+    title: "Email",
+    content: "info@falseceilingnepal.shop",
+    action: "mailto:info@falseceilingnepal.shop",
+    available: "Response within 2 hours",
+  },
+  {
+    icon: MapPin,
+    title: "Location",
+    content: "Kathmandu, Nepal",
+    action: "#",
+    available: "Site visits available",
+  },
+];
+
+const workingHours = [
+  { day: "Monday - Friday", hours: "8:00 AM - 6:00 PM" },
+  { day: "Saturday", hours: "9:00 AM - 5:00 PM" },
+  { day: "Sunday", hours: "10:00 AM - 4:00 PM" },
+  { day: "Emergency", hours: "24/7 Available" },
+];
 
 const Contact = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    service: "",
-    message: "",
+  const [loading, setLoading] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    reset,
+    control,
+    formState: { errors },
+  } = useForm<ContactFormInputs>({
+    resolver: zodResolver(contactFormSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      phone: "",
+      service: "",
+      message: "",
+    },
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Here you would typically send the form data to your backend
-    console.log("Form submitted:", formData);
-    // toast({
-    //   title: "Message Sent!",
-    //   description: "We'll get back to you within 24 hours.",
-    // });
-    toast("Message Sent");
-    setFormData({ name: "", email: "", phone: "", service: "", message: "" });
+  const onSubmit = async (data: ContactFormInputs) => {
+    try {
+      console.log("Form submitted:", data);
+      setLoading(true);
+      const response = await sendContact(data);
+      if (response.success) {
+        toast.success(response.message);
+        reset();
+      } else {
+        toast.error(response.message);
+      }
+    } catch (error: any) {
+      toast.error(error.message);
+    } finally {
+      setLoading(false);
+    }
   };
-
-  const handleChange = (field: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
-  };
-
-  const contactInfo = [
-    {
-      icon: Phone,
-      title: "Phone",
-      content: "9851187267",
-      action: "tel:9851187267",
-      available: "Available 7 days a week",
-    },
-    {
-      icon: MessageCircle,
-      title: "WhatsApp",
-      content: "9851187267",
-      action: "https://wa.me/9779851187267",
-      available: "Quick response guaranteed",
-    },
-    {
-      icon: Mail,
-      title: "Email",
-      content: "info@falseceilingnepal.shop",
-      action: "mailto:info@falseceilingnepal.shop",
-      available: "Response within 2 hours",
-    },
-    {
-      icon: MapPin,
-      title: "Location",
-      content: "Kathmandu, Nepal",
-      action: "#",
-      available: "Site visits available",
-    },
-  ];
-
-  const serviceOptions = [
-    "False Ceiling Design & Installation",
-    "POP Ceiling Design",
-    "Gypsum Ceiling Services",
-    "Acoustic Ceiling Solutions",
-    "Waterproof & Fireproof Ceilings",
-    "Site Visit & Consultation",
-    "Custom Ceiling Projects",
-    "Repair & Maintenance",
-  ];
-
-  const workingHours = [
-    { day: "Monday - Friday", hours: "8:00 AM - 6:00 PM" },
-    { day: "Saturday", hours: "9:00 AM - 5:00 PM" },
-    { day: "Sunday", hours: "10:00 AM - 4:00 PM" },
-    { day: "Emergency", hours: "24/7 Available" },
-  ];
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -134,29 +151,33 @@ const Contact = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <form onSubmit={handleSubmit} className="space-y-6">
+                  <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                     <div className="grid md:grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <Label htmlFor="name">Full Name *</Label>
                         <Input
                           id="name"
                           placeholder="Enter your name"
-                          value={formData.name}
-                          onChange={(e) => handleChange("name", e.target.value)}
-                          required
+                          {...register("name")}
                         />
+                        {errors.name && (
+                          <span className="text-red-500 text-xs">
+                            {errors.name.message}
+                          </span>
+                        )}
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="phone">Phone Number *</Label>
                         <Input
                           id="phone"
                           placeholder="98XXXXXXXX"
-                          value={formData.phone}
-                          onChange={(e) =>
-                            handleChange("phone", e.target.value)
-                          }
-                          required
+                          {...register("phone")}
                         />
+                        {errors.phone && (
+                          <span className="text-red-500 text-xs">
+                            {errors.phone.message}
+                          </span>
+                        )}
                       </div>
                     </div>
 
@@ -166,30 +187,44 @@ const Contact = () => {
                         id="email"
                         type="email"
                         placeholder="your@email.com"
-                        value={formData.email}
-                        onChange={(e) => handleChange("email", e.target.value)}
+                        {...register("email")}
                       />
+                      {errors.email && (
+                        <span className="text-red-500 text-xs">
+                          {errors.email.message}
+                        </span>
+                      )}
                     </div>
 
                     <div className="space-y-2">
                       <Label htmlFor="service">Service Required *</Label>
-                      <Select
-                        value={formData.service}
-                        onValueChange={(value) =>
-                          handleChange("service", value)
-                        }
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a service" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {serviceOptions.map((service, index) => (
-                            <SelectItem key={index} value={service}>
-                              {service}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                      <Controller
+                        name="service"
+                        control={control}
+                        render={({ field }) => (
+                          <Select
+                            value={field.value}
+                            onValueChange={field.onChange}
+                            defaultValue=""
+                          >
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select a service" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {serviceOptions.map((service, index) => (
+                                <SelectItem key={index} value={service}>
+                                  {service}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        )}
+                      />
+                      {errors.service && (
+                        <span className="text-red-500 text-xs">
+                          {errors.service.message}
+                        </span>
+                      )}
                     </div>
 
                     <div className="space-y-2">
@@ -198,23 +233,24 @@ const Contact = () => {
                         id="message"
                         placeholder="Tell us about your project - room size, design preferences, timeline, etc."
                         rows={4}
-                        value={formData.message}
-                        onChange={(e) =>
-                          handleChange("message", e.target.value)
-                        }
-                        required
+                        {...register("message")}
                       />
+                      {errors.message && (
+                        <span className="text-red-500 text-xs">
+                          {errors.message.message}
+                        </span>
+                      )}
                     </div>
 
-                    <Button type="submit" size="lg" className="w-full">
+                    <Button
+                      disabled={loading}
+                      type="submit"
+                      size="lg"
+                      className="w-full"
+                    >
                       <Send className="mr-2 h-4 w-4" />
-                      Send Message
+                      {loading ? "Sending...." : "Send Message"}
                     </Button>
-
-                    <div className="text-center text-sm text-gray-500">
-                      By submitting this form, you agree to our terms and
-                      privacy policy.
-                    </div>
                   </form>
                 </CardContent>
               </Card>
@@ -289,7 +325,12 @@ const Contact = () => {
                     WhatsApp Now
                   </a>
                 </Button>
-                <Button size="lg" variant="secondary" className="w-full" asChild>
+                <Button
+                  size="lg"
+                  variant="secondary"
+                  className="w-full"
+                  asChild
+                >
                   <a href="tel:9851187267">
                     <Phone className="mr-2 h-5 w-5" />
                     Call: 9851187267
