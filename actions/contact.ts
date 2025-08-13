@@ -4,6 +4,7 @@ import { uploader } from "@/helper/FileUploader";
 import { IContact } from "@/types/contact";
 import { IProduct } from "@/types/product";
 import { Response } from "@/types/response";
+import { sendEmail } from "@/utils/mailer";
 import { prisma } from "@/utils/prisma";
 import { ContactFormInputs, contactFormSchema } from "@/zod-schema/contact";
 import { revalidatePath } from "next/cache";
@@ -27,6 +28,11 @@ export async function sendContact(contactInfo: ContactFormInputs) {
     if (!product) {
       throw new Error("failed to create contact on db");
     }
+    await sendEmail(
+      "abc@gmail.com",
+      "just for testing",
+      "this is demo mail message"
+    );
     revalidatePath("/admin/contact");
     return {
       message: "message sent successfully",
@@ -101,7 +107,9 @@ export const deleteContact = async (id: string) => {
   }
 };
 
-export const markAsReadContact = async (id: string): Promise<Response<null>> => {
+export const markAsReadContact = async (
+  id: string
+): Promise<Response<null>> => {
   try {
     const contact = await prisma.contact.update({
       where: { id },
@@ -126,7 +134,9 @@ export const markAsReadContact = async (id: string): Promise<Response<null>> => 
     };
   }
 };
-export const markAsUnReadContact = async (id: string): Promise<Response<null>> => {
+export const markAsUnReadContact = async (
+  id: string
+): Promise<Response<null>> => {
   try {
     const contact = await prisma.contact.update({
       where: { id },

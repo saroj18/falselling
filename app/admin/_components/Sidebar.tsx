@@ -111,15 +111,15 @@ const Sidebar = () => {
     <div
       className={`${
         mobile ? "w-full" : "w-64"
-      } bg-card border-r border-border h-full flex flex-col`}
+      } bg-card border-r sticky left-0 top-0 overflow-y-scroll border-border h-full flex flex-col`}
     >
       <div className="p-6 border-b border-border">
         <Image
-          width={160}
+          width={140}
           height={140}
           src="/logo.png"
           alt="FalseCeilingNepal Logo"
-          className="h-12 w-auto sm:h-16 hover:scale-105 transition-transform duration-200"
+          className="h-10 w-auto sm:h-16 hover:scale-105 transition-transform duration-200"
           priority
           quality={100}
         />

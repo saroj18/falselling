@@ -6,7 +6,7 @@ export type IContact = {
   name: string;
   message: string;
   phone: string;
-  status:'Read':'Unread'
+  status:'Read'|'Unread'
   service: string;
   createdAt: Date;
   updatedAt: Date;

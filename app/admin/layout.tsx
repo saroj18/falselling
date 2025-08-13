@@ -14,9 +14,9 @@ export default async function layout({
     redirect("/auth/login");
   }
   return (
-    <div className="flex item-center w-full gap-x-2">
+    <div className="flex h-screen item-center w-full gap-x-2">
       <Sidebar />
-      <div className="w-full p-4">{children}</div>
+      <div className="w-full  overflow-y-scroll p-4">{children}</div>
     </div>
   );
 }

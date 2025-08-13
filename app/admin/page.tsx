@@ -8,98 +8,43 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar } from "@/components/ui/avatar";
+import { getDashboardData } from "@/actions/dashboard";
+import { getAllUsers } from "@/actions/user";
+import { getAllOrders } from "@/actions/order";
+import Link from "next/link";
 
-const DashboardContent = () => {
+const DashboardContent = async () => {
+  const { data } = await getDashboardData();
+  const { data: recentUsers } = await getAllUsers();
+  const { data: recentOrders } = await getAllOrders();
   const statsCards = [
     {
       title: "Total Users",
-      value: "1,234",
+      value: data?.totalUser,
       change: "+12.5%",
       icon: Users,
       color: "text-blue-600",
     },
     {
       title: "Total Products",
-      value: "89",
+      value: data?.totalProduct,
       change: "+5.2%",
       icon: Package,
       color: "text-green-600",
     },
     {
       title: "Total Orders",
-      value: "456",
+      value: data?.totalOrder,
       change: "+8.1%",
       icon: ShoppingCart,
       color: "text-purple-600",
     },
     {
       title: "Revenue",
-      value: "$12,345",
+      value: "Rs " + data?.totalRevenue,
       change: "+15.3%",
       icon: DollarSign,
       color: "text-yellow-600",
-    },
-  ];
-
-  const recentUsers = [
-    {
-      id: 1,
-      name: "John Doe",
-      email: "john@example.com",
-      status: "Active",
-      joinDate: "2024-01-15",
-    },
-    {
-      id: 2,
-      name: "Jane Smith",
-      email: "jane@example.com",
-      status: "Active",
-      joinDate: "2024-01-14",
-    },
-    {
-      id: 3,
-      name: "Bob Johnson",
-      email: "bob@example.com",
-      status: "Inactive",
-      joinDate: "2024-01-13",
-    },
-    {
-      id: 4,
-      name: "Alice Brown",
-      email: "alice@example.com",
-      status: "Active",
-      joinDate: "2024-01-12",
-    },
-  ];
-
-  const recentOrders = [
-    {
-      id: "#ORD001",
-      customer: "John Doe",
-      product: "Gypsum Board",
-      amount: "$150",
-      status: "Completed",
-    },
-    {
-      id: "#ORD002",
-      customer: "Jane Smith",
-      product: "PVC Panel",
-      amount: "$200",
-      status: "Processing",
-    },
-    {
-      id: "#ORD003",
-      customer: "Bob Johnson",
-      product: "LED Panel",
-      amount: "$300",
-      status: "Pending",
-    },
-    {
-      id: "#ORD004",
-      customer: "Alice Brown",
-      product: "Metal Ceiling",
-      amount: "$450",
-      status: "Completed",
     },
   ];
 
@@ -117,15 +62,6 @@ const DashboardContent = () => {
                       {stat.title}
                     </p>
                     <p className="text-2xl font-bold">{stat.value}</p>
-                    <p
-                      className={`text-xs ${
-                        stat.change.startsWith("+")
-                          ? "text-green-600"
-                          : "text-red-600"
-                      }`}
-                    >
-                      {stat.change} from last month
-                    </p>
                   </div>
                   <Icon className={`h-8 w-8 ${stat.color}`} />
                 </div>
@@ -143,22 +79,21 @@ const DashboardContent = () => {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {recentUsers.map((user) => (
+              {recentUsers?.slice(0, 6).map((user) => (
                 <div
                   key={user.id}
                   className="flex items-center justify-between"
                 >
                   <div className="flex items-center space-x-3">
-                    <Avatar className="h-8 w-8 bg-muted">
+                    <Avatar className="h-8 w-8 bg-muted flex items-center justify-center font-bold">
                       <span className="text-sm">
-                        {user.name
-                          .split(" ")
-                          .map((n) => n[0])
-                          .join("")}
+                        {user.firstname[0].toUpperCase()}
                       </span>
                     </Avatar>
                     <div>
-                      <p className="text-sm font-medium">{user.name}</p>
+                      <p className="text-sm font-medium">
+                        {user.firstname + " " + user.lastname}
+                      </p>
                       <p className="text-xs text-muted-foreground">
                         {user.email}
                       </p>
@@ -173,13 +108,19 @@ const DashboardContent = () => {
                       {user.status}
                     </Badge>
                     <p className="text-xs text-muted-foreground mt-1">
-                      {user.joinDate}
+                      {new Date(user.createdAt as Date).toLocaleDateString()}
                     </p>
                   </div>
                 </div>
               ))}
             </div>
           </CardContent>
+          <Link
+            href={"/admin/users"}
+            className="max-w-sm mx-auto text-blue-500 underline lowercase"
+          >
+            All Users
+          </Link>
         </Card>
 
         <Card>
@@ -189,28 +130,32 @@ const DashboardContent = () => {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {recentOrders.map((order) => (
+              {recentOrders?.slice(0, 5).map((order) => (
                 <div
                   key={order.id}
                   className="flex items-center justify-between"
                 >
                   <div>
-                    <p className="text-sm font-medium">{order.id}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {order.customer}
+                    <p className="text-sm font-medium">
+                      #{order.id.slice(0, 10)}
                     </p>
                     <p className="text-xs text-muted-foreground">
-                      {order.product}
+                      {order.orderBy.firstname}
+                    </p>
+                    <p className="text-xs text-muted-foreground font-semibold">
+                      {order.orderedProduct.name}
                     </p>
                   </div>
                   <div className="text-right">
-                    <p className="text-sm font-medium">{order.amount}</p>
+                    <p className="text-sm font-medium">{order.price}</p>
                     <Badge
                       variant={
-                        order.status === "Completed"
+                        order.status === "COMPLETED"
                           ? "default"
-                          : order.status === "Processing"
+                          : order.status === "PENDING"
                           ? "secondary"
+                          : order.status == "CANCEL"
+                          ? "destructive"
                           : "outline"
                       }
                     >
@@ -221,6 +166,12 @@ const DashboardContent = () => {
               ))}
             </div>
           </CardContent>
+          <Link
+            href={"/admin/orders"}
+            className="max-w-sm mx-auto text-blue-500 underline lowercase"
+          >
+            All Orders
+          </Link>
         </Card>
       </div>
     </div>
