@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   Card,
@@ -39,7 +39,7 @@ export default function PasswordSection() {
         </p>
       </div>
 
-      <div className="grid gap-6 max-w-2xl">
+      <div className=" max-w-2xl mx-auto">
         {/* Change Password Card */}
         <Card>
           <CardHeader>
@@ -133,55 +133,6 @@ export default function PasswordSection() {
             </Alert>
 
             <Button className="w-full">Update Password</Button>
-          </CardContent>
-        </Card>
-
-        {/* Security Settings Card */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Security Settings</CardTitle>
-            <CardDescription>
-              Additional security options for your account
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-3">
-              <div className="flex justify-between items-center">
-                <div>
-                  <p className="font-medium">Two-Factor Authentication</p>
-                  <p className="text-sm text-muted-foreground">
-                    Add an extra layer of security
-                  </p>
-                </div>
-                <Button variant="outline" size="sm">
-                  Enable
-                </Button>
-              </div>
-
-              <div className="flex justify-between items-center">
-                <div>
-                  <p className="font-medium">Login Notifications</p>
-                  <p className="text-sm text-muted-foreground">
-                    Get notified of new sign-ins
-                  </p>
-                </div>
-                <Button variant="outline" size="sm">
-                  Configure
-                </Button>
-              </div>
-
-              <div className="flex justify-between items-center">
-                <div>
-                  <p className="font-medium">Active Sessions</p>
-                  <p className="text-sm text-muted-foreground">
-                    Manage your active sessions
-                  </p>
-                </div>
-                <Button variant="outline" size="sm">
-                  View All
-                </Button>
-              </div>
-            </div>
           </CardContent>
         </Card>
       </div>

@@ -126,3 +126,77 @@ export const deleteUser = async (id: string): Promise<Response<IUser[]>> => {
     };
   }
 };
+
+export const updateUserInfo = async (
+  id: string,
+  userUpdatedInfo: any
+): Promise<Response<null>> => {
+  try {
+    const userInfo = await getServerSession(authOptions);
+
+    const findUser = await prisma.user.findUnique({ where: { id } });
+    if (!findUser) {
+      return {
+        message: "User not found",
+        success: false,
+        data: null,
+      };
+    }
+    console.log(findUser.id);
+    console.log(id);
+    if (findUser?.id != id) {
+      return {
+        message: "You are not authorized for this task",
+        success: false,
+        data: null,
+      };
+    }
+
+    await prisma.user.update({
+      where: { id },
+      data: {
+        firstname: userUpdatedInfo.firstName,
+        lastname: userUpdatedInfo.lastName,
+        email: userUpdatedInfo.email,
+        phone: userUpdatedInfo.phone,
+      },
+    });
+    revalidatePath("/dashboard/profile");
+    return {
+      message: "UserInfo update successfully",
+      success: true,
+      data: null,
+    };
+  } catch (error: any) {
+    return {
+      message: error.message || "internal server error",
+      success: false,
+      data: null,
+    };
+  }
+};
+
+export const getSingleUser = async (id: string): Promise<Response<IUser>> => {
+  try {
+    const findUser = (await prisma.user.findUnique({ where: { id } })) as IUser;
+    if (!findUser) {
+      return {
+        message: "User not found",
+        success: false,
+        data: null,
+      };
+    }
+
+    return {
+      message: "",
+      success: true,
+      data: findUser,
+    };
+  } catch (error: any) {
+    return {
+      message: error.message || "internal server error",
+      success: false,
+      data: null,
+    };
+  }
+};
