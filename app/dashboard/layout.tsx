@@ -1,7 +1,8 @@
 import { redirect } from "next/navigation";
-import Sidebar from "./_components/Sidebar";
 import { authOptions } from "@/utils/authOptions";
 import { getServerSession } from "next-auth";
+import { DashboardSidebar } from "./_components/sidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
 
 export default async function layout({
   children,
@@ -14,9 +15,11 @@ export default async function layout({
     redirect("/auth/login");
   }
   return (
-    <div className="flex h-screen item-center w-full gap-x-2">
-      <Sidebar session={session} />
-      <div className="w-full  overflow-y-scroll p-4">{children}</div>
-    </div>
+    <SidebarProvider>
+      <div className="flex pt-8 item-center w-full gap-x-2">
+        <DashboardSidebar />
+        <div className="w-full overflow-y-scroll p-4">{children}</div>
+      </div>
+    </SidebarProvider>
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Menu, X, MessageCircle } from "lucide-react";
+import { Menu, X, MessageCircle, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
@@ -102,7 +102,7 @@ const Header = () => {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container mx-auto px-4">
+      <div className=" mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center flex-shrink-0">
@@ -190,6 +190,9 @@ const Header = () => {
 
           {/* Contact Button - Hidden on small screens */}
           <div className="hidden xl:flex items-center">
+            <Link className="mx-4" href={"/dashboard/profile"}>
+              <User />
+            </Link>
             <Button
               size="sm"
               className="bg-primary hover:bg-primary/90"

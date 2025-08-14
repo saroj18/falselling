@@ -20,12 +20,14 @@ import { Button } from "@/components/ui/button";
 import { Avatar } from "@/components/ui/avatar";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { Session } from "next-auth";
+import { signOut } from "next-auth/react";
 
-const Sidebar = () => {
+const Sidebar = ({ session }: { session: Session }) => {
   const [mobile, setMobile] = useState(false);
   const pathname = usePathname().split("/")[2];
-  console.log("pathname", pathname);
+  const router = useRouter();
 
   const sidebarItems = [
     {
@@ -99,11 +101,11 @@ const Sidebar = () => {
       href: "/admin/gallery",
     },
     {
-      id: "settings",
+      id: "setting",
       label: "Setting",
-      path: "settings",
+      path: "setting",
       icon: Settings,
-      href: "/admin/settings",
+      href: "/admin/setting",
     },
   ];
 
@@ -148,16 +150,21 @@ const Sidebar = () => {
       <div className="p-4 border-t border-border">
         <div className="flex items-center space-x-3 mb-4">
           <Avatar className="h-8 w-8 bg-primary text-primary-foreground">
-            <span className="text-sm font-medium">AD</span>
+            <span className="text-sm font-medium uppercase">
+              {session?.user?.name?.[0]}
+            </span>
           </Avatar>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-medium">Admin User</p>
             <p className="text-xs text-muted-foreground truncate">
-              admin@example.com
+              {session?.user?.email}
             </p>
           </div>
         </div>
         <Button
+          onClick={() => {
+            signOut(), router.push("/login");
+          }}
           variant="ghost"
           size="sm"
           className="w-full justify-start text-muted-foreground"
