@@ -6,6 +6,7 @@ import { prisma } from "@/utils/prisma";
 import { revalidatePath } from "next/cache";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/utils/authOptions";
+import bcrypt from "bcrypt";
 
 export const getAllUsers = async (): Promise<Response<IUser[]>> => {
   try {
@@ -189,6 +190,59 @@ export const getSingleUser = async (id: string): Promise<Response<IUser>> => {
 
     return {
       message: "",
+      success: true,
+      data: findUser,
+    };
+  } catch (error: any) {
+    return {
+      message: error.message || "internal server error",
+      success: false,
+      data: null,
+    };
+  }
+};
+
+export const changePassword = async (
+  email: string,
+  password: {
+    currentPassword: string;
+    newPassword: string;
+    confirmPassword: string;
+  }
+): Promise<Response<IUser>> => {
+  try {
+    const findUser = (await prisma.user.findUnique({
+      where: { email },
+    })) as IUser;
+
+    if (!findUser) {
+      return {
+        message: "User not found",
+        success: false,
+        data: null,
+      };
+    }
+
+    const comparePassword = await bcrypt.compare(
+      password.currentPassword,
+      findUser.password
+    );
+
+    if (!comparePassword) {
+      return {
+        message: "Your old password is incorrect",
+        success: false,
+        data: null,
+      };
+    }
+    const encryptedPassword = await bcrypt.hash(password.newPassword, 10);
+    await prisma.user.update({
+      data: { password: encryptedPassword },
+      where: { id: findUser.id },
+    });
+
+    return {
+      message: "Password update successfully",
       success: true,
       data: findUser,
     };

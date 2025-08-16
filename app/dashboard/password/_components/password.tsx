@@ -13,19 +13,58 @@ import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Shield, Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
+import { changePassword } from "@/actions/user";
+import { Session } from "next-auth";
 
-export default function PasswordSection() {
+export default function PasswordSection({ session }: { session: Session }) {
   const [showPasswords, setShowPasswords] = useState({
     current: false,
     new: false,
     confirm: false,
   });
 
+  const [form, setForm] = useState({
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+  });
+  const [loading, setLoading] = useState(false);
+
   const togglePasswordVisibility = (field: keyof typeof showPasswords) => {
     setShowPasswords((prev) => ({
       ...prev,
       [field]: !prev[field],
     }));
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target;
+    setForm((prev) => ({
+      ...prev,
+      [id]: value,
+    }));
+  };
+
+  const clickHandler = async () => {
+    setLoading(true);
+    if (!form.confirmPassword || !form.currentPassword || !form.newPassword) {
+      toast.error("all field are required");
+      setLoading(false);
+      return;
+    }
+    if (form.newPassword != form.confirmPassword) {
+      toast.error("newPassword & confirmPassword should be same");
+      setLoading(false);
+      return;
+    }
+    const response = await changePassword(session.user?.email as string, form);
+    if (response.success) {
+      toast.success(response.message);
+    } else {
+      toast.error(response.message);
+    }
+    setLoading(false);
   };
 
   return (
@@ -59,6 +98,8 @@ export default function PasswordSection() {
                   id="currentPassword"
                   type={showPasswords.current ? "text" : "password"}
                   placeholder="Enter current password"
+                  value={form.currentPassword}
+                  onChange={handleInputChange}
                 />
                 <Button
                   type="button"
@@ -83,6 +124,8 @@ export default function PasswordSection() {
                   id="newPassword"
                   type={showPasswords.new ? "text" : "password"}
                   placeholder="Enter new password"
+                  value={form.newPassword}
+                  onChange={handleInputChange}
                 />
                 <Button
                   type="button"
@@ -107,6 +150,8 @@ export default function PasswordSection() {
                   id="confirmPassword"
                   type={showPasswords.confirm ? "text" : "password"}
                   placeholder="Confirm new password"
+                  value={form.confirmPassword}
+                  onChange={handleInputChange}
                 />
                 <Button
                   type="button"
@@ -132,7 +177,13 @@ export default function PasswordSection() {
               </AlertDescription>
             </Alert>
 
-            <Button className="w-full">Update Password</Button>
+            <Button
+              disabled={loading}
+              onClick={clickHandler}
+              className="w-full"
+            >
+              {loading ? "Updating...." : "Update Password"}
+            </Button>
           </CardContent>
         </Card>
       </div>
