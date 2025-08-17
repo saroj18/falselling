@@ -15,6 +15,7 @@ import {
   Book,
   ImageDownIcon,
   PhoneCall,
+  LucideHome,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar } from "@/components/ui/avatar";
@@ -99,6 +100,13 @@ const Sidebar = ({ session }: { session: Session }) => {
       path: "gallery",
       icon: ImageDownIcon,
       href: "/admin/gallery",
+    },
+    {
+      id: "services",
+      label: "Services",
+      path: "services",
+      icon: LucideHome,
+      href: "/admin/services",
     },
     {
       id: "setting",

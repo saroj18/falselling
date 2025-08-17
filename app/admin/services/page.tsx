@@ -1,8 +1,8 @@
 import { getAllServices } from "@/actions/service";
-import Services from "./_components/service-list";
+import ServicesContent from "./_components/service-content";
 import { IService } from "@/types/service";
 
 export default async function page() {
   const { data } = await getAllServices();
-  return <Services services={data as IService[]} />;
+  return <ServicesContent services={data as IService[]} />;
 }
