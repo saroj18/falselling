@@ -126,3 +126,26 @@ export const filterByStatus = async (
     return { message: error.message, success: false, data: null };
   }
 };
+
+export const getMyOrders = async (id: string): Promise<Response<IOrder[]>> => {
+  try {
+    const order = (await prisma.order.findMany({
+      include: {
+        orderBy: true,
+        orderedProduct: true,
+      },
+      where: { user_id: id },
+      orderBy: {
+        createdAt: "desc",
+      },
+    })) as IOrder[];
+
+    return {
+      message: "",
+      success: true,
+      data: order,
+    };
+  } catch (error: any) {
+    return { message: error.message, success: false, data: null };
+  }
+};
