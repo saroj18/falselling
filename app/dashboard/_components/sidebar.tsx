@@ -36,13 +36,13 @@ const sidebarItems = [
     href: "/dashboard/order",
     path: "order",
   },
-  {
-    id: "messages",
-    title: "Messages",
-    icon: MessageCircle,
-    href: "/dashboard/message",
-    path: "message",
-  },
+  // {
+  //   id: "messages",
+  //   title: "Messages",
+  //   icon: MessageCircle,
+  //   href: "/dashboard/message",
+  //   path: "message",
+  // },
 ];
 
 export function DashboardSidebar() {

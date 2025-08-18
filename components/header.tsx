@@ -18,6 +18,7 @@ import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { ICategory } from "@/types/category";
 import { getAllCategory } from "@/actions/category";
+import { useSession } from "next-auth/react";
 
 type CatType = {
   name: string;
@@ -28,6 +29,7 @@ const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
   const [category, setCategory] = useState<CatType[]>([]);
+  const { data: session } = useSession();
 
   useEffect(() => {
     async function getCagegory() {
@@ -190,9 +192,11 @@ const Header = () => {
 
           {/* Contact Button - Hidden on small screens */}
           <div className="hidden xl:flex items-center">
-            <Link className="mx-4" href={"/dashboard/profile"}>
-              <User />
-            </Link>
+            {session?.user && (
+              <Link className="mx-4" href={"/dashboard/profile"}>
+                <User />
+              </Link>
+            )}
             <Button
               size="sm"
               className="bg-primary hover:bg-primary/90"

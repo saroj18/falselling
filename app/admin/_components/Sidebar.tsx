@@ -66,20 +66,20 @@ const Sidebar = ({ session }: { session: Session }) => {
       path: "orders",
       href: "/admin/orders",
     },
-    {
-      id: "analytics",
-      path: "analytics",
-      label: "Analytics",
-      icon: BarChart3,
-      href: "/admin/analytics",
-    },
-    {
-      id: "notifications",
-      path: "notifications",
-      label: "Notification",
-      icon: Bell,
-      href: "/admin/notifications",
-    },
+    // {
+    //   id: "analytics",
+    //   path: "analytics",
+    //   label: "Analytics",
+    //   icon: BarChart3,
+    //   href: "/admin/analytics",
+    // },
+    // {
+    //   id: "notifications",
+    //   path: "notifications",
+    //   label: "Notification",
+    //   icon: Bell,
+    //   href: "/admin/notifications",
+    // },
     {
       id: "blogs",
       label: "Blogs",
@@ -171,7 +171,7 @@ const Sidebar = ({ session }: { session: Session }) => {
         </div>
         <Button
           onClick={() => {
-            signOut(), router.push("/login");
+            signOut(), router.push("/auth/login");
           }}
           variant="ghost"
           size="sm"
