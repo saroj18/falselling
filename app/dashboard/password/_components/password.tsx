@@ -10,12 +10,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Shield, Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { changePassword } from "@/actions/user";
 import { Session } from "next-auth";
+import { signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function PasswordSection({ session }: { session: Session }) {
   const [showPasswords, setShowPasswords] = useState({
@@ -23,6 +24,7 @@ export default function PasswordSection({ session }: { session: Session }) {
     new: false,
     confirm: false,
   });
+  const router = useRouter();
 
   const [form, setForm] = useState({
     currentPassword: "",
@@ -69,13 +71,23 @@ export default function PasswordSection({ session }: { session: Session }) {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-3xl font-bold text-foreground">
-          Password & Security
-        </h2>
-        <p className="text-muted-foreground mt-2">
-          Manage your password and security settings
-        </p>
+      <div className="flex justify-between items-center">
+        <div>
+          <h2 className="text-3xl font-bold text-foreground">
+            Password & Security
+          </h2>
+          <p className="text-muted-foreground mt-2">
+            Manage your password and security settings
+          </p>
+        </div>
+        <Button
+          onClick={() => {
+            signOut(), router.push("/auth/login");
+          }}
+          variant={"destructive"}
+        >
+          LogOut
+        </Button>
       </div>
 
       <div className=" max-w-2xl mx-auto">
@@ -168,14 +180,6 @@ export default function PasswordSection({ session }: { session: Session }) {
                 </Button>
               </div>
             </div>
-
-            <Alert>
-              <Shield className="h-4 w-4" />
-              <AlertDescription>
-                Password must be at least 8 characters long and include
-                uppercase, lowercase, numbers, and special characters.
-              </AlertDescription>
-            </Alert>
 
             <Button
               disabled={loading}
