@@ -91,6 +91,7 @@ const UsersContent = ({ recentUsers }: { recentUsers: IUser[] }) => {
                   <th className="text-left p-4 font-medium">Name</th>
                   <th className="text-left p-4 font-medium">Email</th>
                   <th className="text-left p-4 font-medium">Status</th>
+                  <th className="text-left p-4 font-medium">Role</th>
                   <th className="text-left p-4 font-medium">Join Date</th>
                   <th className="text-left p-4 font-medium">Actions</th>
                 </tr>
@@ -130,6 +131,7 @@ const UsersContent = ({ recentUsers }: { recentUsers: IUser[] }) => {
                         {user.status}
                       </Badge>
                     </td>
+                    <td className="p-4 text-muted-foreground">{user.role}</td>
                     <td className="p-4 text-muted-foreground">
                       {new Date(user?.createdAt as Date).toLocaleDateString()}
                     </td>
