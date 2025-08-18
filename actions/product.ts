@@ -46,8 +46,8 @@ export async function addProduct(productInfo: ProductFormData) {
 export const getAllProducts = async (): Promise<Response<IProduct[]>> => {
   try {
     const products = (await prisma.product.findMany({
-      include:{
-        category:true
+      include: {
+        category: true,
       },
       orderBy: {
         createdAt: "desc",
@@ -74,6 +74,7 @@ export const getSingleProduct = async (
     const products = (await prisma.product.findUnique({
       where: { id },
     })) as IProduct;
+
     return {
       message: "",
       success: true,
@@ -136,19 +137,18 @@ export const deleteProduct = async (id: string) => {
   }
 };
 
-
 export const filterProductByCategory = async (
   category: string
 ): Promise<Response<IProduct[]>> => {
   try {
     const products = (await prisma.product.findMany({
       where: {
-      category: {
-        name: category,
-      },
+        category: {
+          name: category,
+        },
       },
       include: {
-      category: true,
+        category: true,
       },
     })) as IProduct[];
     return {

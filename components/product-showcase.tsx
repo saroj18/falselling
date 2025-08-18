@@ -1,6 +1,5 @@
 "use client";
 
-
 import {
   Card,
   CardContent,
@@ -12,76 +11,78 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight, Star } from "lucide-react";
 import Link from "next/link";
+import { ICategory } from "@/types/category";
+import Image from "next/image";
 
-const ProductShowcase = () => {
-  const products = [
-    {
-      category: "Ceiling Materials",
-      items: [
-        {
-          id: 1,
-          name: "Gypsum Boards",
-          description:
-            "High-quality gypsum boards perfect for residential and commercial spaces",
-          price: "From NPR 450/sq.ft",
-          rating: 4.8,
-          image: "bg-gradient-to-br from-muted to-secondary/10",
-          popular: true,
-        },
-        {
-          id: 2,
-          name: "PVC Panels",
-          description:
-            "Waterproof and easy-to-maintain panels ideal for bathrooms and kitchens",
-          price: "From NPR 320/sq.ft",
-          rating: 4.6,
-          image: "bg-gradient-to-br from-accent to-primary/10",
-        },
-        {
-          id: 3,
-          name: "Metal Ceilings",
-          description:
-            "Durable aluminum and steel ceiling systems for modern spaces",
-          price: "From NPR 580/sq.ft",
-          rating: 4.7,
-          image: "bg-gradient-to-br from-muted to-secondary/20",
-        },
-      ],
-    },
-    {
-      category: "Integrated Ceiling Lights",
-      items: [
-        {
-          id: 4,
-          name: "LED Panels",
-          description:
-            "Energy-efficient LED panel lights integrated seamlessly into ceilings",
-          price: "From NPR 2,500/piece",
-          rating: 4.9,
-          image: "bg-gradient-to-br from-primary/20 to-accent",
-          popular: true,
-        },
-        {
-          id: 5,
-          name: "Cove Lighting",
-          description:
-            "Elegant indirect lighting solutions for ambient illumination",
-          price: "From NPR 1,800/meter",
-          rating: 4.7,
-          image: "bg-gradient-to-br from-accent to-secondary/10",
-        },
-        {
-          id: 6,
-          name: "Hanging Lights",
-          description:
-            "Stylish pendant and chandelier installations for focal points",
-          price: "From NPR 3,200/piece",
-          rating: 4.8,
-          image: "bg-gradient-to-br from-muted to-primary/10",
-        },
-      ],
-    },
-  ];
+const ProductShowcase = ({ products }: { products: ICategory[] }) => {
+  // const products = [
+  //   {
+  //     category: "Ceiling Materials",
+  //     items: [
+  //       {
+  //         id: 1,
+  //         name: "Gypsum Boards",
+  //         description:
+  //           "High-quality gypsum boards perfect for residential and commercial spaces",
+  //         price: "From NPR 450/sq.ft",
+  //         rating: 4.8,
+  //         image: "bg-gradient-to-br from-muted to-secondary/10",
+  //         popular: true,
+  //       },
+  //       {
+  //         id: 2,
+  //         name: "PVC Panels",
+  //         description:
+  //           "Waterproof and easy-to-maintain panels ideal for bathrooms and kitchens",
+  //         price: "From NPR 320/sq.ft",
+  //         rating: 4.6,
+  //         image: "bg-gradient-to-br from-accent to-primary/10",
+  //       },
+  //       {
+  //         id: 3,
+  //         name: "Metal Ceilings",
+  //         description:
+  //           "Durable aluminum and steel ceiling systems for modern spaces",
+  //         price: "From NPR 580/sq.ft",
+  //         rating: 4.7,
+  //         image: "bg-gradient-to-br from-muted to-secondary/20",
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     category: "Integrated Ceiling Lights",
+  //     items: [
+  //       {
+  //         id: 4,
+  //         name: "LED Panels",
+  //         description:
+  //           "Energy-efficient LED panel lights integrated seamlessly into ceilings",
+  //         price: "From NPR 2,500/piece",
+  //         rating: 4.9,
+  //         image: "bg-gradient-to-br from-primary/20 to-accent",
+  //         popular: true,
+  //       },
+  //       {
+  //         id: 5,
+  //         name: "Cove Lighting",
+  //         description:
+  //           "Elegant indirect lighting solutions for ambient illumination",
+  //         price: "From NPR 1,800/meter",
+  //         rating: 4.7,
+  //         image: "bg-gradient-to-br from-accent to-secondary/10",
+  //       },
+  //       {
+  //         id: 6,
+  //         name: "Hanging Lights",
+  //         description:
+  //           "Stylish pendant and chandelier installations for focal points",
+  //         price: "From NPR 3,200/piece",
+  //         rating: 4.8,
+  //         image: "bg-gradient-to-br from-muted to-primary/10",
+  //       },
+  //     ],
+  //   },
+  // ];
 
   return (
     <section className="py-20 bg-muted/30">
@@ -96,28 +97,27 @@ const ProductShowcase = () => {
           </p>
         </div>
 
-        {products.map((category, categoryIndex) => (
+        {products.slice(0, 3).map((category, categoryIndex) => (
           <div key={categoryIndex} className="mb-16">
             <h3 className="text-2xl font-bold mb-8 text-center text-foreground">
-              {category.category}
+              {category.name}
             </h3>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {category.items.map((product, index) => (
+              {category.products?.map((product, index) => (
                 <Link href={`/products/${product.id}`} key={index}>
                   <Card className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer">
                     <CardHeader className="pb-4">
                       <div
-                        className={`h-48 rounded-lg ${product.image} mb-4 flex items-center justify-center relative overflow-hidden`}
+                        className={`h-48 rounded-lg ${product.images[0]} mb-4 flex items-center justify-center relative overflow-hidden`}
                       >
-                        {product.popular && (
-                          <Badge className="absolute top-3 right-3 bg-primary hover:bg-primary/90">
-                            Popular
-                          </Badge>
-                        )}
-                        <span className="text-foreground font-medium text-lg">
-                          {product.name}
-                        </span>
+                        <Image
+                          width={700}
+                          height={200}
+                          alt="product images"
+                          src={product.images[0]}
+                          className="rounded-lg mx-auto my-2"
+                        />
                       </div>
                     </CardHeader>
 
@@ -127,19 +127,19 @@ const ProductShowcase = () => {
                           {product.name}
                         </CardTitle>
                         <CardDescription className="text-muted-foreground">
-                          {product.description}
+                          {product.description.slice(0, 50)}...
                         </CardDescription>
                       </div>
 
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-1">
-                          <Star className="h-4 w-4 fill-primary text-primary" />
+                          {/* <Star className="h-4 w-4 fill-primary text-primary" /> */}
                           <span className="text-sm font-medium">
-                            {product.rating}
+                            {/* {product.rating} */}
                           </span>
                         </div>
                         <span className="text-lg font-bold text-primary">
-                          {product.price}
+                          Rs. {product.price} sq/ft
                         </span>
                       </div>
 
