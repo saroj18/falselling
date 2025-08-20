@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo, useEffect } from "react";
 import {
   Card,
   CardContent,
@@ -23,9 +23,35 @@ import Link from "next/link";
 import { IProduct } from "@/types/product";
 import Image from "next/image";
 
+// Utility to highlight search terms
+function highlight(text: string, term: string) {
+  if (!term) return text;
+  const regex = new RegExp(`(${term})`, "gi");
+  return text.split(regex).map((part, i) =>
+    regex.test(part) ? (
+      <span key={i} className="bg-yellow-200 text-black rounded px-1">
+        {part}
+      </span>
+    ) : (
+      part
+    )
+  );
+}
+
+// Debounce hook
+function useDebouncedValue<T>(value: T, delay: number) {
+  const [debounced, setDebounced] = useState(value);
+  useEffect(() => {
+    const handler = setTimeout(() => setDebounced(value), delay);
+    return () => clearTimeout(handler);
+  }, [value, delay]);
+  return debounced;
+}
+
 const Products = ({ products }: { products: IProduct[] }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
+  const debouncedSearch = useDebouncedValue(searchTerm, 300);
 
   const categories = [
     { value: "all", label: "All Products" },
@@ -34,14 +60,18 @@ const Products = ({ products }: { products: IProduct[] }) => {
     { value: "accessories", label: "Accessories" },
   ];
 
-  const filteredProducts = products.filter((product) => {
-    const matchesSearch =
-      product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      product.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory =
-      selectedCategory === "all" || product.category?.name === selectedCategory;
-    return matchesSearch && matchesCategory;
-  });
+  const filteredProducts = useMemo(() => {
+    return products.filter((product) => {
+      const search = debouncedSearch.trim().toLowerCase();
+      const matchesSearch =
+        product.name.toLowerCase().includes(search) ||
+        product.description.toLowerCase().includes(search) ||
+        (product.tags && product.tags.some((tag) => tag.toLowerCase().includes(search)));
+      const matchesCategory =
+        selectedCategory === "all" || product.category?.name === selectedCategory;
+      return matchesSearch && matchesCategory;
+    });
+  }, [products, debouncedSearch, selectedCategory]);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -75,7 +105,7 @@ const Products = ({ products }: { products: IProduct[] }) => {
                   className="pl-10"
                 />
               </div>
-              <Select
+              {/* <Select
                 value={selectedCategory}
                 onValueChange={setSelectedCategory}
               >
@@ -89,7 +119,7 @@ const Products = ({ products }: { products: IProduct[] }) => {
                     </SelectItem>
                   ))}
                 </SelectContent>
-              </Select>
+              </Select> */}
             </div>
             <div className="text-sm text-gray-600">
               Showing {filteredProducts.length} products
@@ -116,11 +146,6 @@ const Products = ({ products }: { products: IProduct[] }) => {
                         src={product.images[0]}
                         className="rounded-lg mx-auto my-2"
                       />
-                      {/* {product.popular && (
-                        <Badge className="absolute top-3 left-3 bg-red-500 hover:bg-red-600">
-                          Popular
-                        </Badge>
-                      )} */}
                       {product.discount > 0 && (
                         <Badge className="absolute top-3 right-3 bg-red-500 hover:bg-green-600">
                           {product.discount}% off
@@ -132,10 +157,10 @@ const Products = ({ products }: { products: IProduct[] }) => {
                   <CardContent className="space-y-4">
                     <div>
                       <CardTitle className="text-lg mb-2 line-clamp-2">
-                        {product.name.slice(0, 20)}...
+                        {highlight(product.name.slice(0, 20), debouncedSearch)}...
                       </CardTitle>
                       <CardDescription className="text-gray-600 line-clamp-2">
-                        {product.description.slice(0, 60)}...
+                        {highlight(product.description.slice(0, 60), debouncedSearch)}...
                       </CardDescription>
                     </div>
 
@@ -148,12 +173,10 @@ const Products = ({ products }: { products: IProduct[] }) => {
                             variant="secondary"
                             className="text-xs"
                           >
-                            {feature}
+                            {highlight(feature, debouncedSearch)}
                           </Badge>
                         ))}
                     </div>
-
-                   
 
                     {/* Pricing */}
                     <div className="space-y-1">

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import {
   Plus,
   Search,
@@ -26,6 +26,7 @@ const CategoriesContent = ({ categories }: { categories: ICategory[] }) => {
   const [categoryDetailsOpen, setCategoryDetailsOpen] = useState(false);
   const [formMode, setFormMode] = useState<"add" | "edit">("add");
   const [loading, setLoading] = useState(false);
+  const [search, setSearch] = useState("");
 
   const handleAddCategory = () => {
     setFormMode("add");
@@ -53,6 +54,17 @@ const CategoriesContent = ({ categories }: { categories: ICategory[] }) => {
     setLoading(false);
   };
 
+  // Filter categories based on search input
+  const filteredCategories = useMemo(() => {
+    if (!search.trim()) return categories;
+    const lower = search.toLowerCase();
+    return categories.filter(
+      (cat) =>
+        cat.name.toLowerCase().includes(lower) ||
+        cat.description.toLowerCase().includes(lower)
+    );
+  }, [categories, search]);
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -66,7 +78,12 @@ const CategoriesContent = ({ categories }: { categories: ICategory[] }) => {
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-          <Input placeholder="Search categories..." className="pl-10" />
+          <Input
+            placeholder="Search categories..."
+            className="pl-10"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
         </div>
         <Button variant="outline">
           <Filter className="h-4 w-4 mr-2" />
@@ -89,7 +106,7 @@ const CategoriesContent = ({ categories }: { categories: ICategory[] }) => {
                 </tr>
               </thead>
               <tbody>
-                {categories.map((category) => (
+                {filteredCategories.map((category) => (
                   <tr
                     key={category.id}
                     className="border-b border-border last:border-0"
@@ -138,6 +155,13 @@ const CategoriesContent = ({ categories }: { categories: ICategory[] }) => {
                     </td>
                   </tr>
                 ))}
+                {filteredCategories.length === 0 && (
+                  <tr>
+                    <td colSpan={4} className="p-4 text-center text-muted-foreground">
+                      No categories found.
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>

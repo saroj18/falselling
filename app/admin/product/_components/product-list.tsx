@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import {
   Plus,
   Search,
@@ -32,6 +32,7 @@ const ProductsContent = ({ products }: ProductsContentProps) => {
   const [productDetailsOpen, setProductDetailsOpen] = useState(false);
   const [formMode, setFormMode] = useState<"add" | "edit">("add");
   const [loading, setLoading] = useState(false);
+  const [search, setSearch] = useState("");
 
   const handleAddProduct = () => {
     setSelectedProduct(null);
@@ -59,6 +60,18 @@ const ProductsContent = ({ products }: ProductsContentProps) => {
     setProductDetailsOpen(true);
   };
 
+  // Filter products based on search input
+  const filteredProducts = useMemo(() => {
+    if (!search.trim()) return products;
+    const lower = search.toLowerCase();
+    return products.filter(
+      (product) =>
+        product.name.toLowerCase().includes(lower) ||
+        product.category?.name?.toLowerCase().includes(lower) ||
+        String(product.price).includes(lower)
+    );
+  }, [products, search]);
+
   return (
     <div className="space-y-6 w-full">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -72,7 +85,12 @@ const ProductsContent = ({ products }: ProductsContentProps) => {
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-          <Input placeholder="Search products..." className="pl-10" />
+          <Input
+            placeholder="Search products..."
+            className="pl-10"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
         </div>
         <Button variant="outline">
           <Filter className="h-4 w-4 mr-2" />
@@ -97,7 +115,7 @@ const ProductsContent = ({ products }: ProductsContentProps) => {
                 </tr>
               </thead>
               <tbody>
-                {products?.map((product) => (
+                {filteredProducts?.map((product) => (
                   <tr
                     key={product.id}
                     className="border-b border-border last:border-0"
@@ -162,6 +180,13 @@ const ProductsContent = ({ products }: ProductsContentProps) => {
                     </td>
                   </tr>
                 ))}
+                {filteredProducts.length === 0 && (
+                  <tr>
+                    <td colSpan={8} className="text-center p-8 text-muted-foreground">
+                      No products found.
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>
