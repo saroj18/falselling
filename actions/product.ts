@@ -164,3 +164,30 @@ export const filterProductByCategory = async (
     };
   }
 };
+
+export const getAllProductsForUserSide = async (): Promise<
+  Response<IProduct[]>
+> => {
+  try {
+    const products = (await prisma.product.findMany({
+      include: {
+        category: true,
+      },
+    })) as IProduct[];
+
+    // If your DB does not support random ordering, shuffle in JS:
+    const shuffledProducts = products.sort(() => Math.random() - 0.5);
+
+    return {
+      message: "",
+      success: true,
+      data: shuffledProducts,
+    };
+  } catch (error: any) {
+    return {
+      message: error.message || "internal server error",
+      success: false,
+      data: null,
+    };
+  }
+};

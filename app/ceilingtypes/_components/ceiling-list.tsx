@@ -64,7 +64,7 @@ const CeilingTypes = ({ ceilingTypes }: { ceilingTypes: ICategory[] }) => {
 
                   <CardContent className="space-y-4">
                     <CardDescription className="text-gray-600">
-                      {ceiling.description}
+                      {ceiling.description.slice(0, 60)}...
                     </CardDescription>
 
                     <div className="space-y-3">

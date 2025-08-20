@@ -97,14 +97,14 @@ const ProductShowcase = ({ products }: { products: ICategory[] }) => {
           </p>
         </div>
 
-        {products.slice(0, 3).map((category, categoryIndex) => (
+        {products.slice(2, 5).map((category, categoryIndex) => (
           <div key={categoryIndex} className="mb-16">
             <h3 className="text-2xl font-bold mb-8 text-center text-foreground">
               {category.name}
             </h3>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {category.products?.map((product, index) => (
+              {category.products?.slice(0, 6)?.map((product, index) => (
                 <Link href={`/products/${product.id}`} key={index}>
                   <Card className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer">
                     <CardHeader className="pb-4">
@@ -124,10 +124,10 @@ const ProductShowcase = ({ products }: { products: ICategory[] }) => {
                     <CardContent className="space-y-4">
                       <div>
                         <CardTitle className="text-xl mb-2">
-                          {product.name}
+                          {product.name.slice(0,20)}...
                         </CardTitle>
                         <CardDescription className="text-muted-foreground">
-                          {product.description.slice(0, 50)}...
+                          {product.description.slice(0, 40)}...
                         </CardDescription>
                       </div>
 

@@ -13,8 +13,12 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import Image from "next/image";
+import { useEffect, useState } from "react";
+import { getAllServices } from "@/actions/service";
+import { IService } from "@/types/service";
 
 const Footer = () => {
+  const [services, setServices] = useState<IService[]>([]);
   const quickLinks = [
     { name: "Home", href: "/" },
     { name: "Products", href: "/products" },
@@ -24,23 +28,16 @@ const Footer = () => {
     { name: "Contact", href: "/contact" },
   ];
 
-  const services = [
-    "False Ceiling Design",
-    "POP Ceiling Installation",
-    "Gypsum Board Ceiling",
-    "Acoustic Solutions",
-    "LED Integration",
-    "Custom Designs",
-  ];
+  useEffect(() => {
+    async function getServices() {
+      const response = await getAllServices();
+      if (response.success) {
+        setServices(response.data as IService[]);
+      }
+    }
 
-  const products = [
-    "Gypsum Boards",
-    "PVC Panels",
-    "Metal Ceilings",
-    "LED Panels",
-    "Acoustic Panels",
-    "Wooden Ceilings",
-  ];
+    getServices();
+  }, []);
 
   return (
     <footer className="bg-secondary text-white">
@@ -86,14 +83,13 @@ const Footer = () => {
             <h3 className="font-semibold text-lg text-primary">Quick Links</h3>
             <ul className="space-y-2">
               {quickLinks.map((link, index) => (
-                <li key={index}>
-                  <Link
-                    href={link.href}
-                    className="text-secondary-foreground/80 hover:text-primary text-sm transition-colors block py-1"
-                  >
-                    {link.name}
-                  </Link>
-                </li>
+                <Link
+                  key={index}
+                  href={link.href}
+                  className="text-secondary-foreground/80  hover:text-primary text-sm transition-colors block py-1"
+                >
+                  <li>{link.name}</li>
+                </Link>
               ))}
             </ul>
           </div>
@@ -101,16 +97,17 @@ const Footer = () => {
           {/* Services */}
           <div className="space-y-4">
             <h3 className="font-semibold text-lg text-primary">Our Services</h3>
-            <ul className="space-y-2">
+            <div className="space-y-2">
               {services.map((service, index) => (
-                <li
+                <Link
+                  href={`/services`}
                   key={index}
-                  className="text-secondary-foreground/80 text-sm py-1"
+                  className="text-secondary-foreground/80 block text-sm py-1"
                 >
-                  {service}
-                </li>
+                  {service.title}
+                </Link>
               ))}
-            </ul>
+            </div>
           </div>
 
           {/* Contact & Newsletter */}
@@ -121,7 +118,7 @@ const Footer = () => {
             <p className="text-secondary-foreground/80 text-sm">
               Get updates on latest ceiling trends and special offers.
             </p>
-            <div className="space-y-3">
+            {/* <div className="space-y-3">
               <div className="flex flex-col sm:flex-row gap-2">
                 <Input
                   placeholder="Your email"
@@ -134,7 +131,7 @@ const Footer = () => {
                   Subscribe
                 </Button>
               </div>
-            </div>
+            </div> */}
 
             {/* Social Links */}
             <div className="flex space-x-3 pt-4">

@@ -1,4 +1,4 @@
-import { filterProductByCategory, getAllProducts } from "@/actions/product";
+import { filterProductByCategory, getAllProducts, getAllProductsForUserSide } from "@/actions/product";
 import Products from "./_components/product-list";
 import { IProduct } from "@/types/product";
 
@@ -12,7 +12,8 @@ export default async function page({ searchParams }: PageProps) {
   if (category) {
     data = await filterProductByCategory(category as string);
   } else {
-    data = await getAllProducts();
+    data = await getAllProductsForUserSide();
+    console.log("products>>>", data);
   }
   return <Products products={data.data as IProduct[]} />;
 }

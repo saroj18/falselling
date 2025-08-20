@@ -103,7 +103,7 @@ const CategoriesContent = ({ categories }: { categories: ICategory[] }) => {
                       </div>
                     </td>
                     <td className="p-4 text-center text-muted-foreground">
-                      {category.description}
+                      {category.description.slice(0, 60)}...
                     </td>
                     <td className="p-4 text-center">
                       <Badge variant="secondary">

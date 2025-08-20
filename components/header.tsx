@@ -38,7 +38,7 @@ const Header = () => {
       const info = data?.map((cat) => {
         return {
           name: cat.name,
-          items: cat.products?.map((prod) => {
+          items: cat.products?.slice(0,5).map((prod) => {
             return {
               name: prod.name,
               href: `/products/${prod.id}`,
@@ -52,35 +52,6 @@ const Header = () => {
     getCagegory();
   }, []);
 
-  const productCategories = [
-    {
-      name: "🪵 Ceiling Materials",
-      items: [
-        { name: "Gypsum Boards", href: "/products/gypsum-boards" },
-        { name: "PVC Panels", href: "/products/pvc-panels" },
-        { name: "Metal Ceilings", href: "/products/metal-ceilings" },
-        { name: "Acoustic Ceilings", href: "/products/acoustic-ceilings" },
-        { name: "Wooden Ceilings", href: "/products/wooden-ceilings" },
-      ],
-    },
-    {
-      name: "💡 Integrated Ceiling Lights",
-      items: [
-        { name: "LED Panels", href: "/products/led-panels" },
-        { name: "Cove Lighting", href: "/products/cove-lighting" },
-        { name: "Hanging Lights", href: "/products/hanging-lights" },
-      ],
-    },
-    {
-      name: "🛠️ Accessories",
-      items: [
-        { name: "Ceiling Frames", href: "/products/ceiling-frames" },
-        { name: "Hangers & Channels", href: "/products/hangers-channels" },
-        { name: "Joint Compounds", href: "/products/joint-compounds" },
-        { name: "Screws & Tapes", href: "/products/screws-tapes" },
-      ],
-    },
-  ];
 
   const navigationItems = [
     { name: "Home", href: "/" },

@@ -132,10 +132,10 @@ const Products = ({ products }: { products: IProduct[] }) => {
                   <CardContent className="space-y-4">
                     <div>
                       <CardTitle className="text-lg mb-2 line-clamp-2">
-                        {product.name}
+                        {product.name.slice(0, 20)}...
                       </CardTitle>
                       <CardDescription className="text-gray-600 line-clamp-2">
-                        {product.description}
+                        {product.description.slice(0, 60)}...
                       </CardDescription>
                     </div>
 
@@ -153,16 +153,7 @@ const Products = ({ products }: { products: IProduct[] }) => {
                         ))}
                     </div>
 
-                    {/* Rating and Reviews */}
-                    <div className="flex items-center justify-between text-sm">
-                      <div className="flex items-center space-x-1">
-                        <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                        {/* <span className="font-medium">{product.rating}</span>
-                        <span className="text-gray-500">
-                          ({product.reviews})
-                        </span> */}
-                      </div>
-                    </div>
+                   
 
                     {/* Pricing */}
                     <div className="space-y-1">
