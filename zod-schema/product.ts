@@ -22,7 +22,7 @@ export const productSchema = z.object({
   description: z
     .string()
     .min(5, "description must be greater than 5 character"),
-  weight: z.coerce.number().min(1, "weight must be required"),
+  weight: z.coerce.number().min(0.1, "weight must be required"),
   dimensions: z.string().min(1, "dimension must be required"),
   sku: z.string().optional(),
   brand: z.string().optional(),
