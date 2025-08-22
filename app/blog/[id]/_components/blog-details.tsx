@@ -15,6 +15,7 @@ import Link from "next/link";
 import { IBlog } from "@/types/blog";
 import { useEffect, useState } from "react";
 import { getAllBlogs } from "@/actions/blog";
+import parse, { domToReact } from "html-react-parser";
 
 const BlogPost = ({ blogPost }: { blogPost: IBlog }) => {
   const [relatedPosts, setRelatedPosts] = useState<IBlog[]>([]);
@@ -94,11 +95,31 @@ const BlogPost = ({ blogPost }: { blogPost: IBlog }) => {
             />
           </div>
 
-          {/* Article Content */}
-          <div
-            className="prose prose-lg max-w-none text-foreground"
-            dangerouslySetInnerHTML={{ __html: blogPost.content }}
-          />
+         
+
+          <div>
+                            {parse(blogPost.content, {
+                              replace: (node) => {
+                                if (node.type === "tag") {
+                                  switch (node.name) {
+                                    case "h1":
+                                      node.attribs.class = "text-4xl font-bold mb-4";
+                                      break;
+                                    case "h2":
+                                      node.attribs.class = "text-3xl font-semibold mb-3";
+                                      break;
+                                    case "h3":
+                                      node.attribs.class = "text-xl font-semibold mb-3";
+                                      break;
+                                    case "p":
+                                      node.attribs.class = "mb-2 leading-relaxed";
+                                      break;
+                                  }
+                                  return domToReact([node]);
+                                }
+                              },
+                            })}
+                          </div>
 
           {/* Tags */}
           <div className="mt-8 pt-8 border-t border-border">

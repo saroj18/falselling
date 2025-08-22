@@ -52,6 +52,10 @@ import { addBlog, deleteBlog, updateBlog } from "@/actions/blog";
 import { toast } from "sonner";
 import { IBlog } from "@/types/blog";
 import { Skeleton } from "@/components/ui/skeleton";
+import dynamic from "next/dynamic";
+import parse, { domToReact } from "html-react-parser";
+
+const BlogEditor = dynamic(() => import("./text-editor"), { ssr: false });
 
 const BlogContent = ({ blogs }: { blogs: IBlog[] }) => {
   const [selectedBlog, setSelectedBlog] = useState<any>(null);
@@ -59,6 +63,7 @@ const BlogContent = ({ blogs }: { blogs: IBlog[] }) => {
   const [blogDetailsOpen, setBlogDetailsOpen] = useState(false);
   const [formMode, setFormMode] = useState<"add" | "edit">("add");
   const [loading, setLoading] = useState(false);
+  const [content, setContent] = useState("");
 
   const form = useForm<Blog | BlogUpdate>({
     resolver: zodResolver(
@@ -81,6 +86,11 @@ const BlogContent = ({ blogs }: { blogs: IBlog[] }) => {
       setLoading(true);
 
       if (formMode === "add") {
+        if (data.content.trim().length === 0) {
+          toast.error("Content cannot be empty");
+          setLoading(false);
+          return;
+        }
         const response = await addBlog(data as Blog);
         if (response.success) {
           toast.success("Blog added successfully");
@@ -149,6 +159,12 @@ const BlogContent = ({ blogs }: { blogs: IBlog[] }) => {
     }
     setLoading(false);
   };
+
+  useEffect(() => {
+    if (content) {
+      form.setValue("content", content);
+    }
+  }, [content, form]);
 
   return (
     <div className="space-y-6">
@@ -341,23 +357,8 @@ const BlogContent = ({ blogs }: { blogs: IBlog[] }) => {
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="content"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Content</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        placeholder="Enter blog content"
-                        className="min-h-[200px]"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+
+              <BlogEditor value={content} onChange={setContent} />
               <Card>
                 <CardContent className="p-6 space-y-4">
                   <h3 className="text-lg font-semibold">Blog Images</h3>
@@ -626,7 +627,29 @@ const BlogContent = ({ blogs }: { blogs: IBlog[] }) => {
               </div>
               <div>
                 <h4 className="font-medium mb-2">Content</h4>
-                <p className="text-muted-foreground">{selectedBlog.content}</p>
+                <div>
+                  {parse(selectedBlog.content, {
+                    replace: (node) => {
+                      if (node.type === "tag") {
+                        switch (node.name) {
+                          case "h1":
+                            node.attribs.class = "text-4xl font-bold mb-4";
+                            break;
+                          case "h2":
+                            node.attribs.class = "text-3xl font-semibold mb-3";
+                            break;
+                          case "h3":
+                            node.attribs.class = "text-xl font-semibold mb-3";
+                            break;
+                          case "p":
+                            node.attribs.class = "mb-2 leading-relaxed";
+                            break;
+                        }
+                        return domToReact([node]);
+                      }
+                    },
+                  })}
+                </div>
               </div>
               <div>
                 <h4 className="font-medium mb-2">Tags</h4>
