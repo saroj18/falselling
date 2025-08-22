@@ -21,7 +21,6 @@ export async function addProduct(productInfo: ProductFormData) {
       };
     }
     const images = await uploader.upload(validateProduct.data.images);
-    console.log(validateProduct.data);
     const product = await prisma.product.create({
       data: {
         ...validateProduct.data,
@@ -93,10 +92,30 @@ export const updateProduct = async (
   productInfo: any
 ): Promise<Response<IProduct>> => {
   try {
+    let images = productInfo.data.images;
+    if (typeof productInfo.data.images[0] !== "string") {
+      const product = await prisma.product.findUnique({
+        where: { id: productInfo.data.id },
+      });
+      if (!product) {
+        throw new Error("product not found");
+      }
+      await Promise.all(
+        product.images.map(async (imgUrl: string) => {
+          const publicId = imgUrl.split("/").slice(-2).join("/").split(".")[0]; // Extract public ID from URL
+          await uploader.delete(publicId);
+        })
+      );
+      images = await uploader.upload(productInfo.data.images);
+    }
     const { id, ...updateData } = productInfo.data;
     const product = (await prisma.product.update({
       where: { id },
-      data: updateData,
+      data: {
+        ...updateData,
+        category: { connect: { id: updateData.category[0].id } },
+        images,
+      },
     })) as IProduct;
     if (!product) {
       throw new Error("failed to update product on db");

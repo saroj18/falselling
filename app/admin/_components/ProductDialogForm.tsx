@@ -84,7 +84,6 @@ const ProductFormDialog = ({
     ) as any,
   });
 
-
   const onSubmit = async (data: ProductFormData) => {
     if (mode == "add") {
       console.log("pro", data);
@@ -380,7 +379,7 @@ const ProductFormDialog = ({
                       )}
                     </div>
                   )}
-                  {product?.images?.length > 0 && (
+                  {/* {product?.images?.length > 0 && (
                     <div className="grid grid-cols-2 gap-4">
                       {product?.images.map((img: string, index: number) => (
                         <div key={index} className="relative group">
@@ -396,7 +395,7 @@ const ProductFormDialog = ({
                         </div>
                       ))}
                     </div>
-                  )}
+                  )} */}
                 </CardContent>
               </Card>
             </div>

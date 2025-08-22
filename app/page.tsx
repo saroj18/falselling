@@ -8,6 +8,8 @@ import { prisma } from "@/utils/prisma";
 const page = async () => {
   const { data } = await getAllCategory();
 
+  
+
   return (
     <div className="min-h-screen w-full overflow-x-hidden">
       <Hero />

@@ -23,6 +23,15 @@ class ImageUploader implements FileUploader {
     const imageURL = (await Promise.all(uploadPromise)) as string[];
     return imageURL;
   }
+
+  async delete(publicId: string) {
+    try {
+      const result = await cloudinary.uploader.destroy(publicId);
+      return result;
+    } catch (error) {
+      throw new Error("Failed to delete image");
+    }
+  }
 }
 
 export const uploader = new ImageUploader();
