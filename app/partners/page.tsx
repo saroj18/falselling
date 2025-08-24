@@ -23,6 +23,18 @@ import {
   Building,
 } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Partners of FalseCeilingNepal.shop | Trusted Ceiling Solutions",
+  description:
+    "Meet our trusted partners who provide high-quality materials for false ceiling, acoustic, and insulation projects in Nepal.",
+  keywords: [
+    "false ceiling partners Nepal",
+    "ceiling material suppliers Nepal",
+    "acoustic panel partners Nepal",
+  ],
+};
 
 const Partners = () => {
   const benefits = [

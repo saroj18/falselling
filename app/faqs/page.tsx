@@ -16,6 +16,19 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Search, HelpCircle, MessageCircle, Phone } from "lucide-react";
+import { Metadata } from "next";
+
+
+export const metadata: Metadata = {
+  title: "False Ceiling FAQs | Common Questions in Nepal",
+  description:
+    "Find answers to frequently asked questions about false ceilings, acoustic panels, and insulation services in Nepal.",
+  keywords: [
+    "false ceiling FAQs Nepal",
+    "gypsum ceiling questions",
+    "acoustic panel FAQs",
+  ],
+};
 
 const FAQs = () => {
   const faqCategories = [

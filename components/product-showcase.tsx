@@ -15,74 +15,6 @@ import { ICategory } from "@/types/category";
 import Image from "next/image";
 
 const ProductShowcase = ({ products }: { products: ICategory[] }) => {
-  // const products = [
-  //   {
-  //     category: "Ceiling Materials",
-  //     items: [
-  //       {
-  //         id: 1,
-  //         name: "Gypsum Boards",
-  //         description:
-  //           "High-quality gypsum boards perfect for residential and commercial spaces",
-  //         price: "From NPR 450/sq.ft",
-  //         rating: 4.8,
-  //         image: "bg-gradient-to-br from-muted to-secondary/10",
-  //         popular: true,
-  //       },
-  //       {
-  //         id: 2,
-  //         name: "PVC Panels",
-  //         description:
-  //           "Waterproof and easy-to-maintain panels ideal for bathrooms and kitchens",
-  //         price: "From NPR 320/sq.ft",
-  //         rating: 4.6,
-  //         image: "bg-gradient-to-br from-accent to-primary/10",
-  //       },
-  //       {
-  //         id: 3,
-  //         name: "Metal Ceilings",
-  //         description:
-  //           "Durable aluminum and steel ceiling systems for modern spaces",
-  //         price: "From NPR 580/sq.ft",
-  //         rating: 4.7,
-  //         image: "bg-gradient-to-br from-muted to-secondary/20",
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     category: "Integrated Ceiling Lights",
-  //     items: [
-  //       {
-  //         id: 4,
-  //         name: "LED Panels",
-  //         description:
-  //           "Energy-efficient LED panel lights integrated seamlessly into ceilings",
-  //         price: "From NPR 2,500/piece",
-  //         rating: 4.9,
-  //         image: "bg-gradient-to-br from-primary/20 to-accent",
-  //         popular: true,
-  //       },
-  //       {
-  //         id: 5,
-  //         name: "Cove Lighting",
-  //         description:
-  //           "Elegant indirect lighting solutions for ambient illumination",
-  //         price: "From NPR 1,800/meter",
-  //         rating: 4.7,
-  //         image: "bg-gradient-to-br from-accent to-secondary/10",
-  //       },
-  //       {
-  //         id: 6,
-  //         name: "Hanging Lights",
-  //         description:
-  //           "Stylish pendant and chandelier installations for focal points",
-  //         price: "From NPR 3,200/piece",
-  //         rating: 4.8,
-  //         image: "bg-gradient-to-br from-muted to-primary/10",
-  //       },
-  //     ],
-  //   },
-  // ];
 
   return (
     <section className="py-20 bg-muted/30">
@@ -97,7 +29,7 @@ const ProductShowcase = ({ products }: { products: ICategory[] }) => {
           </p>
         </div>
 
-        {products.slice(2, 5).map((category, categoryIndex) => (
+        {products.slice(4, 6).map((category, categoryIndex) => (
           <div key={categoryIndex} className="mb-16">
             <h3 className="text-2xl font-bold mb-8 text-center text-foreground">
               {category.name}

@@ -1,6 +1,21 @@
 import { filterProductByCategory, getAllProducts, getAllProductsForUserSide } from "@/actions/product";
 import Products from "./_components/product-list";
 import { IProduct } from "@/types/product";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "False Ceiling Products | Gypsum, T-Grid, PET, Rockwool in Nepal",
+  description:
+    "Browse high-quality false ceiling products, acoustic panels, Rockwool, aluminum foil insulation, and T-grid systems available in Nepal.",
+  keywords: [
+    "false ceiling products Nepal",
+    "gypsum ceiling",
+    "T-grid",
+    "PET panels",
+    "Rockwool",
+    "acoustic insulation Nepal",
+  ],
+};
 
 interface PageProps {
   searchParams: Promise<{ category: string }>;

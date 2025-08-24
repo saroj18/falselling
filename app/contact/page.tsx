@@ -34,6 +34,19 @@ import { toast } from "sonner";
 import { ContactFormInputs, contactFormSchema } from "@/zod-schema/contact";
 import { sendContact } from "../../actions/contact";
 import { useState } from "react";
+import { Metadata } from "next";
+
+
+export const metadata: Metadata = {
+  title: "Contact FalseCeilingNepal.shop | Free Site Visit in Nepal",
+  description:
+    "Get in touch for false ceiling, acoustic panel, and insulation services in Nepal. Call +977 9851187267 for a free consultation.",
+  keywords: [
+    "contact false ceiling Nepal",
+    "ceiling services Nepal",
+    "acoustic consultation Nepal",
+  ],
+};
 
 const serviceOptions = [
   "False Ceiling Design & Installation",
