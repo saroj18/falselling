@@ -28,23 +28,39 @@ const Services = ({ services }: { services: IService[] }) => {
   const processSteps = [
     {
       step: "01",
-      title: "Consultation",
-      description: "Free site visit and requirement analysis",
+      title: "Consultation & Site Visit",
+      description:
+        "Call or WhatsApp +977 9851187267. Share room size, purpose, and design idea. Our team conducts site measurement and inspection.",
     },
     {
       step: "02",
-      title: "Design",
-      description: "3D mockup and material selection",
+      title: "Design & Quotation",
+      description:
+        "We provide measurements, BOQ, ceiling/acoustic design with lighting, and a transparent quotation covering material and labor costs.",
     },
     {
       step: "03",
-      title: "Installation",
-      description: "Professional installation by experts",
+      title: "Material Selection",
+      description:
+        "Choose from gypsum, grid, PVC, wooden ceilings, Rockwool, Glasswool, aluminum foil insulation, acoustic panels, and decorative finishes.",
     },
     {
       step: "04",
-      title: "Finishing",
-      description: "Quality check and final touches",
+      title: "Installation by Experts",
+      description:
+        "Our technicians install framework, ceilings, insulation, acoustic treatment, and lighting while maintaining clean and safe sites.",
+    },
+    {
+      step: "05",
+      title: "Quality Check & Handover",
+      description:
+        "We inspect joints, sealing, airtight insulation, and ceiling alignment before handing over with full warranty assurance.",
+    },
+    {
+      step: "06",
+      title: "After-Sales Support",
+      description:
+        "We provide responsive service support. Warranty covers both materials and workmanship for your peace of mind.",
     },
   ];
 
@@ -77,16 +93,14 @@ const Services = ({ services }: { services: IService[] }) => {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-16">
             {processSteps.map((step, index) => (
               <div key={index} className="text-center">
                 <div className="relative mb-4">
                   <div className="w-16 h-16 bg-blue-600 text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto">
                     {step.step}
                   </div>
-                  {index < processSteps.length - 1 && (
-                    <div className="hidden lg:block absolute top-8 left-full w-full h-0.5 bg-gray-200 -translate-x-8"></div>
-                  )}
+                 
                 </div>
                 <h3 className="font-semibold text-lg mb-2">{step.title}</h3>
                 <p className="text-gray-600 text-sm">{step.description}</p>

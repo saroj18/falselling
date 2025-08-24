@@ -36,18 +36,6 @@ import { sendContact } from "../../actions/contact";
 import { useState } from "react";
 import { Metadata } from "next";
 
-
-export const metadata: Metadata = {
-  title: "Contact FalseCeilingNepal.shop | Free Site Visit in Nepal",
-  description:
-    "Get in touch for false ceiling, acoustic panel, and insulation services in Nepal. Call +977 9851187267 for a free consultation.",
-  keywords: [
-    "contact false ceiling Nepal",
-    "ceiling services Nepal",
-    "acoustic consultation Nepal",
-  ],
-};
-
 const serviceOptions = [
   "False Ceiling Design & Installation",
   "POP Ceiling Design",
@@ -84,17 +72,16 @@ const contactInfo = [
   {
     icon: MapPin,
     title: "Location",
-    content: "Kathmandu, Nepal",
+    content: "Khumaltar, Lalitpur, Kathmandu, Nepal",
     action: "#",
     available: "Site visits available",
   },
 ];
 
 const workingHours = [
-  { day: "Monday - Friday", hours: "8:00 AM - 6:00 PM" },
-  { day: "Saturday", hours: "9:00 AM - 5:00 PM" },
-  { day: "Sunday", hours: "10:00 AM - 4:00 PM" },
-  { day: "Emergency", hours: "24/7 Available" },
+  { day: "Monday - Friday", hours: "9:00 AM - 6:00 PM" },
+  { day: "Saturday", hours: "10:00 AM - 4:00 PM" },
+  { day: "Sunday", hours: "closed" },
 ];
 
 const Contact = () => {
@@ -351,65 +338,6 @@ const Contact = () => {
                 </Button>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ Section */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">
-              Frequently Asked Questions
-            </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              Quick answers to common questions about our services and process.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            {[
-              {
-                question: "How long does installation take?",
-                answer:
-                  "Most residential projects take 3-7 days depending on size and complexity. We provide exact timelines during consultation.",
-              },
-              {
-                question: "Do you provide free site visits?",
-                answer:
-                  "Yes! We offer free site visits and consultations within Kathmandu valley. Minimal charges may apply for distant locations.",
-              },
-              {
-                question: "What warranty do you provide?",
-                answer:
-                  "We provide 1 year comprehensive warranty on all installations, covering both materials and workmanship.",
-              },
-              {
-                question: "Can you work with existing lighting?",
-                answer:
-                  "Absolutely! We can integrate with existing lighting or help you upgrade to modern LED solutions.",
-              },
-              {
-                question: "What payment methods do you accept?",
-                answer:
-                  "We accept cash, bank transfers, and digital payments. Payment schedule is typically 50% advance and 50% on completion.",
-              },
-              {
-                question: "Do you clean up after installation?",
-                answer:
-                  "Yes, complete cleanup is included in our service. We leave your space clean and ready to use.",
-              },
-            ].map((faq, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow">
-                <CardContent className="p-6">
-                  <h3 className="font-semibold mb-3 flex items-start">
-                    <CheckCircle className="h-5 w-5 text-green-600 mr-2 mt-0.5 flex-shrink-0" />
-                    {faq.question}
-                  </h3>
-                  <p className="text-gray-600 ml-7">{faq.answer}</p>
-                </CardContent>
-              </Card>
-            ))}
           </div>
         </div>
       </section>

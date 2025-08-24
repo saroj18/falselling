@@ -69,11 +69,11 @@ const Footer = () => {
               </div>
               <div className="flex items-center space-x-3 text-sm">
                 <Mail className="h-4 w-4 text-primary flex-shrink-0" />
-                <span className="break-all">info@falseceilingnepal.shop</span>
+                <span className="break-all">prefabhousenepal@gmail.com</span>
               </div>
               <div className="flex items-center space-x-3 text-sm">
                 <MapPin className="h-4 w-4 text-primary flex-shrink-0" />
-                <span>Kathmandu, Nepal</span>
+                <span>Khumaltar, Lalitpur, Kathmandu, Nepal</span>
               </div>
             </div>
           </div>
@@ -118,22 +118,7 @@ const Footer = () => {
             <p className="text-secondary-foreground/80 text-sm">
               Get updates on latest ceiling trends and special offers.
             </p>
-            {/* <div className="space-y-3">
-              <div className="flex flex-col sm:flex-row gap-2">
-                <Input
-                  placeholder="Your email"
-                  className="bg-secondary/50 border-secondary-foreground/20 text-white placeholder:text-secondary-foreground/60 flex-1"
-                />
-                <Button
-                  size="sm"
-                  className="bg-primary hover:bg-primary/90 whitespace-nowrap"
-                >
-                  Subscribe
-                </Button>
-              </div>
-            </div> */}
 
-            {/* Social Links */}
             <div className="flex space-x-3 pt-4">
               <Button
                 size="sm"

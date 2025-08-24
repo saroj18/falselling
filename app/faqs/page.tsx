@@ -1,4 +1,3 @@
-
 import {
   Accordion,
   AccordionContent,
@@ -18,7 +17,6 @@ import { Badge } from "@/components/ui/badge";
 import { Search, HelpCircle, MessageCircle, Phone } from "lucide-react";
 import { Metadata } from "next";
 
-
 export const metadata: Metadata = {
   title: "False Ceiling FAQs | Common Questions in Nepal",
   description:
@@ -37,19 +35,29 @@ const FAQs = () => {
       icon: "ℹ️",
       faqs: [
         {
-          question: "What is a false ceiling?",
+          question: "What types of false ceilings do you provide?",
           answer:
-            "A false ceiling, also known as a dropped ceiling or suspended ceiling, is a secondary ceiling hung below the structural ceiling. It's used for aesthetic purposes, to hide structural elements, improve acoustics, and house lighting, HVAC, and electrical systems.",
+            "We offer:\n• Gypsum Board Ceilings (plain, designer, cove, step)\n• T-Grid / Mineral Fiber Ceilings (for offices, schools, retail)\n• PVC / Metal Ceilings (moisture & service areas)\n• Wooden & Louver Ceilings (premium interiors)",
         },
         {
-          question: "What materials are used for false ceilings?",
+          question: "Do you provide both supply and installation?",
           answer:
-            "We use various materials including gypsum boards, PVC panels, metal tiles, acoustic panels, and wooden panels. Each material has specific benefits - gypsum for versatility, PVC for moisture resistance, metal for durability, and wood for natural aesthetics.",
+            "Yes. We provide:\n• Material supply only (if you have your own installer)\n• Supply & installation (recommended for best finish and warranty)",
         },
         {
-          question: "Do you provide services across Nepal?",
+          question: "Do you handle small projects (like a single room)?",
           answer:
-            "Yes, we provide false ceiling services across major cities in Nepal including Kathmandu, Pokhara, Lalitpur, Bhaktapur, Chitwan, and many other locations. Contact us to confirm service availability in your area.",
+            "Yes. We take on homes, single rooms, and large commercial projects. No project is too small.",
+        },
+        {
+          question: "Where do you provide service?",
+          answer:
+            "We are based in Khumaltar, Lalitpur (Kathmandu Valley) and provide services nationwide: Kathmandu • Pokhara • Chitwan • Butwal • Biratnagar • Dharan • Nepalgunj",
+        },
+        {
+          question: "Do you offer free site visits?",
+          answer:
+            "Yes. We provide free site visit & consultation in Kathmandu Valley. For other cities, travel costs may apply.",
         },
       ],
     },
@@ -58,113 +66,51 @@ const FAQs = () => {
       icon: "💰",
       faqs: [
         {
-          question: "How much does false ceiling installation cost?",
+          question: "How much does a false ceiling cost in Nepal?",
           answer:
-            "Pricing varies based on material choice, design complexity, and area size. Generally, basic gypsum ceiling costs start from NPR 200-400 per sq ft, while premium materials and designs can range from NPR 500-1200 per sq ft. We provide free detailed quotes after site inspection.",
+            "• Gypsum ceilings: NPR 180–250/sq.ft (design dependent)\n• T-Grid ceilings: NPR 120–180/sq.ft\n• Wooden / designer ceilings: Custom pricing\n👉 Final cost depends on material, design, lighting integration, and site condition.",
         },
         {
-          question: "Is the quote inclusive of materials and labor?",
+          question: "How do I request a quotation?",
           answer:
-            "Yes, our quotes include all materials (boards, frames, accessories), labor costs, and basic finishing. Additional charges may apply for premium finishes, complex designs, or electrical work that requires certified electricians.",
-        },
-        {
-          question: "Do you offer discounts for large projects?",
-          answer:
-            "Yes, we offer attractive discounts for projects above 1000 sq ft. Bulk discounts range from 5-15% depending on the project size. Contact us for customized pricing on large commercial or residential projects.",
+            "Simply:\n• Call / WhatsApp: +977 9851187267\n• Send room dimensions + site photos\n• Our team will prepare a BOQ (Bill of Quantity) & quotation within 24–48 hours",
         },
       ],
     },
     {
-      category: "Installation Process",
+      category: "Performance & Benefits",
+      icon: "🎯",
+      faqs: [
+        {
+          question: "Can false ceilings reduce heat and noise?",
+          answer:
+            "Yes. With Rockwool / Glasswool insulation above the ceiling, false ceilings help to:\n• Reduce heat transfer from metal roofs\n• Absorb noise & echo in offices, cafés, studios",
+        },
+        {
+          question: "Will acoustic panels block outside noise?",
+          answer:
+            "Acoustic panels reduce echo and reverb inside the room. To block external noise, we install additional isolation layers (dense boards, decoupling frames, seals).",
+        },
+        {
+          question: "How do we stop dew drops/condensation on steel ceilings?",
+          answer:
+            "By installing:\n• Rockwool (50–75 mm) under steel panels\n• Covered with aluminum foil vapor barrier (airtight, taped seams)\nThis ensures the ceiling stays warm and dry → no dripping water.",
+        },
+      ],
+    },
+    {
+      category: "Installation & Warranty",
       icon: "🔧",
       faqs: [
         {
           question: "How long does installation take?",
           answer:
-            "Installation time depends on the area and complexity. Typically, a standard room (150-200 sq ft) takes 2-3 days, while larger areas may take 1-2 weeks. We provide a detailed timeline during the planning phase.",
+            "• Small room (100 sq.ft): 2–3 days\n• Medium hall (500–800 sq.ft): 1–2 weeks\n• Large projects (factories, showrooms): Timeline given after site visit",
         },
         {
-          question: "Is the installation process messy?",
+          question: "What is the warranty on your work?",
           answer:
-            "We take precautions to minimize mess, including covering furniture and using dust protection sheets. However, some dust and debris are inevitable during cutting and installation. We clean up thoroughly after completion.",
-        },
-        {
-          question: "Can false ceiling be installed in existing homes?",
-          answer:
-            "Absolutely! False ceilings can be installed in existing homes without major renovations. We work around your furniture and daily routine to minimize disruption.",
-        },
-        {
-          question: "What preparation is needed before installation?",
-          answer:
-            "Clear the room of fragile items, ensure electrical points are planned, and provide access to the ceiling area. We'll guide you through specific preparations during the site visit.",
-        },
-      ],
-    },
-    {
-      category: "Maintenance & Durability",
-      icon: "🛠️",
-      faqs: [
-        {
-          question: "How long do false ceilings last?",
-          answer:
-            "Quality false ceilings can last 15-25 years with proper maintenance. Gypsum and metal ceilings typically have longer lifespans compared to PVC, which may need replacement after 10-15 years.",
-        },
-        {
-          question: "How do I maintain my false ceiling?",
-          answer:
-            "Regular dusting, avoiding water exposure (except for moisture-resistant materials), and periodic inspection for sagging or cracks. We provide detailed maintenance guidelines and offer annual maintenance services.",
-        },
-        {
-          question: "What if panels get damaged?",
-          answer:
-            "Individual panels can usually be replaced without affecting the entire ceiling. We maintain stock of common materials and provide repair services. Keep some spare panels for future repairs.",
-        },
-        {
-          question: "Are false ceilings suitable for Nepal's climate?",
-          answer:
-            "Yes, when properly installed with appropriate materials. We use moisture-resistant materials in areas prone to humidity and ensure proper ventilation to prevent fungal growth during monsoon season.",
-        },
-      ],
-    },
-    {
-      category: "Design & Customization",
-      icon: "🎨",
-      faqs: [
-        {
-          question: "Can you create custom designs?",
-          answer:
-            "Yes, we specialize in custom designs including multi-level ceilings, curved surfaces, integrated lighting, and artistic patterns. Our design team works with you to create unique solutions that match your vision.",
-        },
-        {
-          question: "Can lights be integrated into false ceilings?",
-          answer:
-            "Absolutely! We can integrate various lighting options including LED panels, cove lighting, spotlights, and chandeliers. Proper planning ensures easy maintenance and optimal light distribution.",
-        },
-        {
-          question: "Do you provide 3D design previews?",
-          answer:
-            "Yes, for larger projects, we provide 3D visualizations to help you see how the final ceiling will look before installation begins.",
-        },
-      ],
-    },
-    {
-      category: "Technical Questions",
-      icon: "⚙️",
-      faqs: [
-        {
-          question: "What is the minimum ceiling height required?",
-          answer:
-            "We recommend a minimum ceiling height of 9 feet for false ceiling installation. This allows for proper clearance while maintaining comfortable room proportions. For lower ceilings, we offer slim profile solutions.",
-        },
-        {
-          question: "Can false ceilings support heavy fixtures?",
-          answer:
-            "Standard false ceilings can support light fixtures up to 15-20 kg. For heavier installations like large chandeliers, we install additional structural support systems.",
-        },
-        {
-          question: "Are false ceilings fire-resistant?",
-          answer:
-            "We offer fire-resistant materials including special gypsum boards and metal panels with fire ratings. These are especially important for commercial installations and are available upon request.",
+            "• Workmanship warranty: 1 year\n• Material warranty: As per manufacturer (usually 5–10 years)",
         },
       ],
     },
@@ -172,7 +118,6 @@ const FAQs = () => {
 
   return (
     <div className="min-h-screen">
-
       {/* Hero Section */}
       <section className="py-16 bg-gradient-to-r from-blue-50 to-purple-50">
         <div className="container mx-auto px-4 text-center">
@@ -183,12 +128,6 @@ const FAQs = () => {
             Find answers to common questions about false ceiling installation,
             materials, pricing, and maintenance.
           </p>
-
-          {/* Search Bar */}
-          <div className="max-w-md mx-auto relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-            <Input placeholder="Search FAQs..." className="pl-10" />
-          </div>
         </div>
       </section>
 
@@ -316,7 +255,6 @@ const FAQs = () => {
           </div>
         </div>
       </section>
-
     </div>
   );
 };
