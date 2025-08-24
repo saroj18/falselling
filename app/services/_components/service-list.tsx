@@ -154,7 +154,7 @@ const Services = ({ services }: { services: IService[] }) => {
                           </div>
                           <div className="flex items-center text-sm text-gray-500">
                             <Clock className="h-3 w-3 mr-1" />
-                            {service?.duration}
+                            {service?.duration} days
                           </div>
                         </div>
                       </div>
