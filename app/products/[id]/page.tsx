@@ -14,7 +14,7 @@ export default async function page({
   const { data } = await getSingleProduct(id);
   return (
     <ProductDetail
-      userId={(session?.user as any).id}
+      userId={(session?.user as any)?.id}
       product={data as IProduct}
     />
   );
