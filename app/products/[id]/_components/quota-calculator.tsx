@@ -27,7 +27,7 @@ const Quote = ({ product, userId }: { product: IProduct; userId: string }) => {
 
   const handleGetDetailedQuote = async () => {
     if (!userId) {
-      router.push("/login");
+      router.push("/auth/login");
       return;
     }
     const response = await createOrder({
