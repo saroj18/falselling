@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   ],
 };
 
-export default async function page(){
-  const {data}=await getAllPhotos()
-  return <Portfolio projects={data as IGallery[]} />
+export default async function page() {
+  const { data } = await getAllPhotos();
+  return <Portfolio projects={data as IGallery[]} />;
 }

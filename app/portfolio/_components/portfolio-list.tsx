@@ -74,7 +74,7 @@ const Portfolio = ({ projects }: { projects: IGallery[] }) => {
       {/* Projects Section */}
       <section className="py-16">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 ">
+          <div className="grid w-full !max-w-4xl grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 ">
             {projects.map((project) => (
               <Card
                 key={project.id}
@@ -184,7 +184,7 @@ const Portfolio = ({ projects }: { projects: IGallery[] }) => {
 
       {/* Project Images Dialog */}
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="!max-w-5xl max-h-[90vh] overflow-y-auto">
           {selectedProject && (
             <>
               <DialogHeader>
